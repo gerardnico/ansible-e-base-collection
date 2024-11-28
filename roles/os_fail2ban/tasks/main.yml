@@ -1,0 +1,7 @@
+---
+
+
+- name: Fail2ban
+  become: true
+  import_tasks: 'os_fail2ban.yml'
+  tags: os-fail2ban

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipset type="hash:net">
+  <option name="family" value="inet"/>
+  <!-- 2343KE 5 -->
+  <entry>143.176.206.82/32</entry>
+</ipset>

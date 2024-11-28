@@ -1,0 +1,54 @@
+
+# Firewall on the cloud provider is just a gateway firewall
+- name: Enable firewalld
+  systemd:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: Firewall - Ssh
+  notify: 'firewalld reload'
+  firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled
+    zone: '{{ firewalld_zone }}'
+
+- name: Firewall - Create IpSet Home Ipv4
+  notify: 'firewalld reload'
+  template:
+    src: 'ipset/{{ ipset_home_ipv4 }}.xml'
+    dest: '/etc/firewalld/ipsets/{{ ipset_home_ipv4 }}.xml'
+
+- name: Firewall - Create Ipset Home Mac
+  notify: 'firewalld reload'
+  template:
+    src: 'ipset/{{ ipset_home_mac }}.xml'
+    dest: '/etc/firewalld/ipsets/{{ ipset_home_mac }}.xml'
+
+- name: Firewall - Create Ipset Cloudflare Ipv4
+  notify: 'firewalld reload'
+  template:
+    src: 'ipset/{{ ipset_cloudflare_ipv4 }}.xml'
+    dest: '/etc/firewalld/ipsets/{{ ipset_cloudflare_ipv4 }}.xml'
+
+- name: Firewall - Create Ipset Cloudflare Ipv6
+  notify: 'firewalld reload'
+  template:
+    src: 'ipset/{{ ipset_cloudflare_ipv6 }}.xml'
+    dest: '/etc/firewalld/ipsets/{{ ipset_cloudflare_ipv6 }}.xml'
+
+- name: Firewall - Create Ipset Nl Ipv4
+  notify: 'firewalld reload'
+  template:
+    src: 'ipset/{{ ipset_nl_ipv4 }}.xml'
+    dest: '/etc/firewalld/ipsets/{{ ipset_nl_ipv4 }}.xml'
+
+- name: No Zone drifting
+  notify: firewalld reload
+  lineinfile:
+    dest: /etc/firewalld/firewalld.conf
+    regexp: "^AllowZoneDrifting"
+    line: "AllowZoneDrifting=no"
+    insertafter: EOF
+    state: present

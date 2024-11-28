@@ -1,0 +1,143 @@
+# https://community.hetzner.com/tutorials/securing-ssh
+
+- name: Root Login
+  when: sshd_permit_root_login is False
+  block:
+    # Because we deny root login, we need to check user existence
+    - name: Check sshd_allowed_users
+      loop: "{{ sshd_allowed_users }}"
+      loop_control:
+        loop_var: sshd_allowed_user
+      ansible.builtin.include_tasks:
+        file: os_sshd_check_allowed_user.yml
+        apply:
+          tags: sshd
+
+    # Maybe we could have that in the wheel.sudoer file
+    - name: Sshd - No root login
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        insertafter: EOF
+        state: present
+      notify: ssh reload
+
+- name: Sshd - No Password authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+- name: Sshd - No KbdInteractiveAuthentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^KbdInteractiveAuthentication"
+    line: "KbdInteractiveAuthentication no"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+- name: Sshd - No ChallengeResponseAuthentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^ChallengeResponseAuthentication"
+    line: "ChallengeResponseAuthentication no"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+# https://man.openbsd.org/sshd_config#DenyUsers
+- name: Sshd - No access to the user provided by the VPS provider
+  when:
+    - sshd_deny_users is defined
+    - sshd_deny_users is not string
+    - sshd_deny_users is not mapping
+    - sshd_deny_users is iterable
+    - sshd_deny_users | length > 0
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^DenyUsers"
+    line: "DenyUsers {{ sshd_deny_users | join(' ') }}"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+# https://man.openbsd.org/sshd_config#MaxAuthTries
+- name: Sshd - MaxAuthTries
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^MaxAuthTries"
+    line: "MaxAuthTries 2"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+- name: Sshd - No AllowTcpForwarding
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^AllowTcpForwarding"
+    line: "AllowTcpForwarding no"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+- name: Sshd - No X11Forwarding
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^X11Forwarding"
+    line: "X11Forwarding no"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+- name: Sshd - No AllowAgentForwarding
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^AllowAgentForwarding"
+    line: "AllowAgentForwarding no"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+- name: Sshd - AuthorizedKeysFile
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^AuthorizedKeysFile"
+    line: "AuthorizedKeysFile .ssh/authorized_keys"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+
+# https://man.openbsd.org/sshd_config#AllowUsers
+# Example with origin
+# AllowUsers nickeau www-user@oeg.gerardnico.com backend@oeg.gerardnico.com
+- name: Ensure sshd_config contains AllowUsers directive
+  when:
+    - sshd_allowed_users is defined
+    - sshd_allowed_users is not string
+    - sshd_allowed_users is not mapping
+    - sshd_allowed_users is iterable
+    - sshd_allowed_users | length > 0
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^AllowUsers'
+    line: "AllowUsers {{ sshd_allowed_users | join(' ') }}"
+    create: yes
+    state: present
+    backup: yes
+
+# Only on ipv4
+# https://linux.die.net/man/5/sshd_config
+- name: Sshd - No ipv6 connection
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^AddressFamily"
+    line: "AddressFamily inet"
+    insertafter: EOF
+    state: present
+  notify: ssh reload
+

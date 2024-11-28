@@ -1,0 +1,9 @@
+
+# You need to set the become on handlers because it runs by default as ansible_user
+
+
+- name: "ssh reload"
+  become: yes
+  systemd:
+    state: restarted
+    name: sshd

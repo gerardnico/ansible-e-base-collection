@@ -1,0 +1,40 @@
+
+# See cgroups.md
+# It was used to control the backup process cpu (zip, ...)
+
+- name: "Cgroups - Install Cgroups"
+  when: "ansible_facts['pkg_mgr']  == 'yum'"
+  ansible.builtin.yum:
+    name:
+      - libcgroup
+      - libcgroup-tools # the service cgconfig is in there
+    state: present
+
+- name: 'Cgroups - Enabled and start the service'
+  systemd:
+    name: 'cgconfig'
+    enabled: 'yes'
+    state: started
+
+- name: Determine the Cgroup version
+  shell:
+    cmd: |
+      stat -fc %T /sys/fs/cgroup/
+  register: cgroupFs # if value is tmpfs: v1 if the value is `cgroup2fs`: v2
+
+- name: Create the CPU 50 group {{ cgroup_cpu_50 }}
+  shell:
+    cmd: |
+      cgcreate -g cpu:/{{ cgroup_cpu_50 }};
+
+- name: Cgroupv1 - Set the CPU 50 group conf {{ cgroup_cpu_50 }}
+  when: cgroupFs.stdout == 'tmpfs'
+  shell:
+    cmd: |
+      cgset -r cpu.shares=512 {{ cgroup_cpu_50 }}
+
+- name: CgroupV2 - Set the CPU 50 group conf {{ cgroup_cpu_50 }}
+  when: cgroupFs.stdout == 'cgroup2fs'
+  shell:
+    cmd: |
+      cgset -r cpu.weight=50 {{ cgroup_cpu_50 }}

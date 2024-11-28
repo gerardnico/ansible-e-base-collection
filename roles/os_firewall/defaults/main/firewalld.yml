@@ -1,0 +1,13 @@
+
+
+ipset_home_ipv4: 'home-ipv4'
+ipset_home_mac: 'home-mac'
+
+ipset_cloudflare_ipv4: 'cloudflare-ipv4'
+ipset_cloudflare_ipv6: 'cloudflare-ipv6'
+
+ipset_nl_ipv4: 'nl-ipv4'
+
+# We have only one interface, therefore, there is only
+# one zone, this is the public default zone
+firewalld_zone: 'public'

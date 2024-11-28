@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ipset type="hash:mac">
+  <short>mac-list</short>
+  <!-- Nico: Wifi-->
+  <entry>5c:5f:67:6b:cb:9b</entry>
+  <!-- Nico: Ethernet-->
+  <entry>10:65:30:a8:b0:99</entry>
+</ipset>

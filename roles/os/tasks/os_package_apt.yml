@@ -1,0 +1,12 @@
+
+# Upgrade needs to be before installation to update the repo
+- name: "Os - Apt Upgrade all packages"
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+
+- name: "Apt - Install Utility Packages"
+  ansible.builtin.apt:
+    pkg: "{{ os_packages }}"
+    state: present
+

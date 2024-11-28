@@ -1,0 +1,12 @@
+## Too many things, that are not working otherwise
+
+- name: Disable SELinux
+  become: true
+  register: selinux
+  ansible.posix.selinux:
+    state: disabled
+
+- name: Reboot required for selinux
+  when: selinux is changed
+  fail:
+    msg: "selinux has changed, you should reboot the server first with the `reboot` command"

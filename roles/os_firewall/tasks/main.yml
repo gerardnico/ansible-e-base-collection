@@ -1,0 +1,13 @@
+---
+
+
+- name: Populate service facts to check firewalld
+  tags: os-firewall
+  service_facts:
+
+
+# `not-found` in facts, too bizarre
+- name: Firewall
+  when: "'firewalld.service' in ansible_facts.services and ansible_facts.services['firewalld.service'].status != 'not-found'"
+  include_tasks: 'os_firewall.yml'
+  tags: os-firewall

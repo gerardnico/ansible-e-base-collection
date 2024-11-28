@@ -1,0 +1,17 @@
+
+# You need to set the become on handlers because it runs by default as ansible_user
+
+- name: "fail2ban reload"
+  become: yes
+  systemd:
+    state: restarted
+    name: fail2ban
+    enabled: 'yes'
+
+- name: 'logrotate reload'
+  become: yes
+  systemd:
+    name: 'logrotate.service'
+    enabled: 'yes'
+    daemon_reload: yes
+    state: restarted

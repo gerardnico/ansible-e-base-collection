@@ -1,0 +1,30 @@
+
+- name: "Fail2ban - Yum Install"
+  when: "ansible_facts['pkg_mgr']  == 'yum'"
+  ansible.builtin.yum:
+    name: fail2ban
+    state: present
+  notify: fail2ban reload
+
+- name: "Fail2ban - Apt Install"
+  when: "ansible_facts['pkg_mgr']  == 'apt'"
+  ansible.builtin.apt:
+    name: fail2ban
+    state: present
+  notify: fail2ban reload
+
+- name: "Fail2ban - Copy jail.local file"
+  template:
+    dest: '/etc/fail2ban/jail.local'
+    src: 'jail.local'
+    mode: u=rwx,g=rx,o=rx
+  notify: fail2ban reload
+
+# Log rotate file is already supplied during the installation
+# https://raw.githubusercontent.com/fail2ban/fail2ban/0.11/files/fail2ban-logrotate
+- name: "Fail2ban - Log Rotate"
+  template:
+    src: 'templates/fail2ban-logrotate.j2'
+    dest: '/etc/logrotate.d/fail2ban'
+  notify: logrotate reload
+

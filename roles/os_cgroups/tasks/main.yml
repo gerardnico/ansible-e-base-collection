@@ -1,0 +1,8 @@
+---
+
+
+- name: Cgroups # Resource consumption
+  become: true
+  import_tasks: 'os_cgroups.yml'
+  tags: os-cgroups
+

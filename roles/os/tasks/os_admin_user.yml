@@ -1,0 +1,41 @@
+# Create a user
+- name: Copy the sudoer file (sudo config file)
+  template:
+    src: 'wheel.sudoer'
+    dest: '/etc/sudoers.d/wheel'
+    mode: 0750
+
+# A group that is used in `wheel.sudoer` to allow sudo
+- name: Create the wheel group (sudo)
+  ansible.builtin.group:
+    name: wheel
+    state: present
+
+- name: "User - Create the login user"
+  user:
+    name: '{{ ssh_user_name }}'
+    comment: The SSH user
+    state: present
+    group: 'users'
+    shell: /bin/bash
+    # extra group
+    groups:
+      - wheel # The sudo admin group
+    # no password, only key
+    # password: "{{ ssh_user_password | password_hash('sha512') }}"
+
+- name: Create .ssh directory
+  ansible.builtin.file:
+    path: "/home/{{ ssh_user_name }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ ssh_user_name }}"
+
+# Or
+# https://github.com/ansible-collections/ansible.posix/blob/main/docs/ansible.posix.authorized_key_module.rst
+- name: Add SSH key to authorized_keys
+  ansible.builtin.copy:
+    content: "{{ ssh_user_key }}"
+    dest: "/home/{{ ssh_user_name }}/.ssh/authorized_keys"
+    mode: '0600'
+    owner: "{{ ssh_user_name }}"

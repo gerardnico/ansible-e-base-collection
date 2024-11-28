@@ -1,0 +1,45 @@
+---
+
+
+- name: 'Fail if not RedHat/Debian family: Family is: ({{ ansible_os_family }})'
+  fail:
+    msg: "This role supports only the Redhat and Debian family. This computer is installed on the following OS family ({{ ansible_os_family }})"
+  when: 'ansible_os_family != "RedHat" and ansible_os_family != "Debian"'
+
+- name: Os Facts
+  become: true
+  import_tasks: 'os_facts.yml'
+  tags: os-facts
+
+- name: Gather facts about installed (Selinux, ...)
+  package_facts:
+
+- name: Os Package
+  ansible.builtin.include_tasks: "os_package_{{ ansible_facts['pkg_mgr'] }}.yml"
+  tags: os-package
+
+- name: Admin User
+  become: true
+  import_tasks: 'os_admin_user.yml'
+  tags: user
+
+- name: Sshd
+  become: true
+  import_tasks: 'os_sshd.yml'
+  tags: os-ssh
+
+- name: Hostname
+  become: true
+  import_tasks: 'os_hostname.yml'
+  tags: network
+
+
+#- name: Cgroups # Resource consumption
+#  become: true
+#  import_tasks: 'root_cgroups.yml'
+#  tags: os-cgroups
+
+- name: Selinux
+  when: "'libselinux' in ansible_facts.packages"
+  include_tasks: 'os_selinux.yml'
+  tags: os-selinux

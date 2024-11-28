@@ -1,0 +1,24 @@
+# Print Os Facts
+
+- name: Os Facts
+  debug:
+    msg:
+      ansible_distribution: "{{ ansible_distribution }}"
+      ansible_distribution_version: "{{ ansible_distribution_version }}"
+      ansible_distribution_major_version: "{{ ansible_distribution_major_version }}"
+      ansible_distribution_release: "{{ ansible_distribution_release }}"
+      ansible_kernel: "{{ ansible_kernel }}"
+      ansible_kernel_version: "{{ ansible_kernel_version }}"
+      # yum, dnf
+      ansible_pkg_mgr: "{{ ansible_pkg_mgr }}"
+      # systemd, ...
+      ansible_service_mgr: "{{ ansible_service_mgr }}"
+      ansible_os_family: "{{ ansible_os_family }}"
+      # Linux
+      ansible_system: "{{ ansible_system }}"
+      # name.domain.tld
+      ansible_fqdn: "{{ ansible_fqdn }}"
+
+#- name: Ansible Facts
+#  debug:
+#    var: ansible_facts

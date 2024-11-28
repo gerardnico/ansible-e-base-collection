@@ -1,0 +1,8 @@
+
+# You need to set the become on handlers because it runs by default as ansible_user
+
+- name: "firewalld reload"
+  become: yes
+  systemd:
+    state: restarted
+    name: firewalld
