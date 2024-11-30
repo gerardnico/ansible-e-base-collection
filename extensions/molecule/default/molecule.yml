@@ -4,24 +4,27 @@
 # https://ansible.readthedocs.io/projects/molecule/configuration/#driver
 # Delegated driver by default (https://ansible.readthedocs.io/projects/molecule/configuration/#delegated)
 driver:
+  # v6 made the "delegated" one the default
+  # https://ansible.readthedocs.io/projects/molecule/configuration/#delegated
+  # Under this driver, it is the developers responsibility to implement the create and destroy playbooks
   name: default
+# Platforms define the instances to be tested, and the groups to which the instances belong.
 # Instance to create (manage the type of distribution CentOS, Fedora, Debian)
 # https://ansible.readthedocs.io/projects/molecule/configuration/#platforms
 platforms:
+  # These properties are literally read by tasks in `create.yml`
+  # It's a property of community docker
+  # * name is the name of the container
+  # * image ...
+  # You could have more than one image started
+  # The command is hard written as `sleep 1d`
+  #
+  # There is also a docker driver which is completely other thing
+  # https://github.com/ansible-community/molecule-plugins/tree/main/src/molecule_plugins/docker
   # https://ansible.readthedocs.io/projects/molecule/guides/custom-image/
   - name: molecule-debian
     image: ghcr.io/gerardnico/molecule-debian:12.8
-    # command: ""
-#    command: ${MOLECULE_DOCKER_COMMAND:-""} # "sleep", "1d"
-#    volumes:
-#      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-#    privileged: true
-#    pre_build_image: true
-#    env:
-#      http_proxy: "${http_proxy}"
-#      https_proxy: "${https_proxy}"
-#      no_proxy: "${no_proxy} "
-# https://ansible.readthedocs.io/projects/molecule/configuration/#dependency
+
 dependency:
   name: galaxy
   options:

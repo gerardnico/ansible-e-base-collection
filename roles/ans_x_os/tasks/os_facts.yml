@@ -1,5 +1,9 @@
 # Print Os Facts
 # Example online: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_vars_facts.html
+# gather facts needs python module installed on the target
+# access via:
+# * ansible_facts['distribution']
+# * or ansible_distribution
 
 - name: Os Facts
   debug:

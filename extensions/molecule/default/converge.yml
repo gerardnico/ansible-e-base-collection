@@ -1,10 +1,6 @@
 - name: Fail if molecule group is missing
   hosts: localhost
   tasks:
-    - name: Print some info
-      ansible.builtin.debug:
-        msg: "{{ groups }}"
-
     - name: Assert group existence
       ansible.builtin.assert:
         that: "'molecule' in groups"
@@ -13,12 +9,11 @@
 
 - name: Converge
   hosts: molecule
-  # We disable gather facts because it would fail due to our container not
-  # having python installed. This will not prevent use from running 'raw'
-  # commands. Most molecule users are expected to use containers that already
-  # have python installed in order to avoid notable delays installing it.
-  # for ansible_os_family
   gather_facts: true
+  vars:
+    ans_x_hostname: sub.example.com
+    ans_x_admin_username: admin
+    ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
   tasks:
     - name: Check uname
       ansible.builtin.raw: uname -a
@@ -29,7 +24,7 @@
       ansible.builtin.assert:
         that: result.stdout | regex_search("^Linux")
 
-    - name: Testing role
+    - name: Testing Ans-x-os
       ansible.builtin.include_role:
         name: gerardnico.ansible_x_collection.ans_x_os
         #tasks_from: main.yml

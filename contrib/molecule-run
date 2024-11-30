@@ -6,6 +6,6 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 pushd "$SCRIPT_DIR/../extensions"
 
-molecule reset && molecule converge
+molecule --ans-x-without-pass reset && molecule --ans-x-without-pass converge
 
 popd

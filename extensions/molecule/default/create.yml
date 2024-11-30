@@ -41,9 +41,6 @@
                 hosts:
                   "{{ item.name }}":
                     ansible_connection: community.docker.docker
-                    ans_x_hostname: sub.example.com
-                    ans_x_admin_username: admin
-                    ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
       ansible.builtin.set_fact:
         molecule_inventory: >
           {{ molecule_inventory | combine(inventory_partial_yaml | from_yaml, recursive=true) }}
