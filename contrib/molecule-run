@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -TCEeuo pipefail
+
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+
+pushd "$SCRIPT_DIR/../extensions"
+
+molecule reset && molecule converge
+
+popd

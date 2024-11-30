@@ -2,14 +2,14 @@
 
 - name: Parse user
   ansible.builtin.set_fact:
-    sshd_user: "{{ sshd_allowed_user.split('@')[0] }}"
+    ans_x_sshd_user: "{{ ans_x_sshd_allowed_user.split('@')[0] }}"
 
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/getent_module.html
 - name: Check if user exists and can login
   ansible.builtin.getent:
     database: passwd
-    key: "{{ item.ansible_facts.sshd_user }}"
+    key: "{{ item.ansible_facts.ans_x_sshd_user }}"
   register: user_exists
   failed_when: >
     user_exists.failed or
-    (ansible_facts['getent_passwd'][item.ansible_facts.sshd_user][4] in ['/bin/false', '/usr/sbin/nologin'])
+    (ansible_facts['getent_passwd'][item.ansible_facts.ans_x_sshd_user][4] in ['/bin/false', '/usr/sbin/nologin'])

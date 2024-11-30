@@ -1,10 +1,6 @@
 ---
 
 
-- name: 'Fail if not RedHat/Debian family: Family is: ({{ ansible_os_family }})'
-  fail:
-    msg: "This role supports only the Redhat and Debian family. This computer is installed on the following OS family ({{ ansible_os_family }})"
-  when: 'ansible_os_family != "RedHat" and ansible_os_family != "Debian"'
 
 - name: Os Facts
   become: true
@@ -14,19 +10,25 @@
 - name: Gather facts about installed (Selinux, ...)
   package_facts:
 
+- name: 'Check Package Manager'
+  when: "ansible_facts['pkg_mgr'] not in [ 'apt', 'yum' ]"
+  fail:
+    msg: "The package manager {{ ansible_facts['pkg_mgr'] }} is not supported (only apt or yum)"
+
 - name: Os Package
   ansible.builtin.include_tasks: "os_package_{{ ansible_facts['pkg_mgr'] }}.yml"
   tags: os-package
 
 - name: Admin User
+  when: ans_x_admin_username is defined
   become: true
   import_tasks: 'os_admin_user.yml'
   tags: user
 
-- name: Sshd
-  become: true
-  import_tasks: 'os_sshd.yml'
-  tags: os-ssh
+- name: 'Fail if hostname is undefined'
+  when: 'ans_x_hostname is undefined'
+  fail:
+    msg: "The `ans_x_hostname` variable should be set."
 
 - name: Hostname
   become: true

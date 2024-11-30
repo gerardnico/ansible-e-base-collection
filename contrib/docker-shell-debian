@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -TCEeuo pipefail
+
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+
+pushd "$SCRIPT_DIR/../Dockerfiles/molecule-debian/12.8"
+
+source .envrc
+dock-x shell
+
+popd

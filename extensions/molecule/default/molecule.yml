@@ -1,0 +1,37 @@
+# https://ansible.readthedocs.io/projects/molecule/getting-started/#inspecting-the-moleculeyml
+---
+# Driver provider
+# https://ansible.readthedocs.io/projects/molecule/configuration/#driver
+# Delegated driver by default (https://ansible.readthedocs.io/projects/molecule/configuration/#delegated)
+driver:
+  name: default
+# Instance to create (manage the type of distribution CentOS, Fedora, Debian)
+# https://ansible.readthedocs.io/projects/molecule/configuration/#platforms
+platforms:
+  # https://ansible.readthedocs.io/projects/molecule/guides/custom-image/
+  - name: molecule-debian
+    image: ghcr.io/gerardnico/molecule-debian:12.8
+    # command: ""
+#    command: ${MOLECULE_DOCKER_COMMAND:-""} # "sleep", "1d"
+#    volumes:
+#      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+#    privileged: true
+#    pre_build_image: true
+#    env:
+#      http_proxy: "${http_proxy}"
+#      https_proxy: "${https_proxy}"
+#      no_proxy: "${no_proxy} "
+# https://ansible.readthedocs.io/projects/molecule/configuration/#dependency
+dependency:
+  name: galaxy
+  options:
+    # Path relative to where you start molecule
+    # ie from extensions
+    requirements-file: molecule/default/requirements.yml
+#provisioner:
+#  name: ansible
+#  config_options:
+    # defaults:
+      # https://ansible.readthedocs.io/projects/dev-tools/user-guide/testing/#molecule
+      # collections_path: ${ANSIBLE_COLLECTIONS_PATH}
+      # In bash: export ANSIBLE_COLLECTIONS_PATH=/home/user/working/collections

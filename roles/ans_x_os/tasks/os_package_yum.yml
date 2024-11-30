@@ -1,11 +1,6 @@
 
-#- name: 'Package - Upgrade all packages'
-#  yum:
-#    name=*
-#    state=latest
 
 - name: Package - Add the EPEL repository
-  when: "ansible_distribution_major_version in [ 7, 8, 9 ] and ansible_os_family == 'RedHat'"
   yum_repository:
     name: epel
     description: EPEL YUM repo
@@ -14,14 +9,13 @@
     priority: 100 # the default is 99, less priority than other repo
 
 - name: "Package - Adds the gpg key from the EPEL repo"
-  when: "ansible_distribution_major_version in [ 7, 8, 9 ] and ansible_os_family == 'RedHat'"
   rpm_key:
     state: present
     key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
 
 - name: "Package - Install Utility Packages"
   yum:
-    name: {{ os_packages }}
+    name: {{ ans_x_os_packages }}
     enablerepo: epel
     state: present
 

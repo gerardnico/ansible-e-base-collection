@@ -11,10 +11,10 @@
     name: wheel
     state: present
 
-- name: "User - Create the login user"
+- name: "User - Create the admin user"
   user:
-    name: '{{ ssh_user_name }}'
-    comment: The SSH user
+    name: '{{ ans_x_admin_username }}'
+    comment: The admin user
     state: present
     group: 'users'
     shell: /bin/bash
@@ -26,16 +26,20 @@
 
 - name: Create .ssh directory
   ansible.builtin.file:
-    path: "/home/{{ ssh_user_name }}/.ssh"
+    path: "/home/{{ ans_x_admin_username }}/.ssh"
     state: directory
     mode: '0700'
-    owner: "{{ ssh_user_name }}"
+    owner: "{{ ans_x_admin_username }}"
 
-# Or
-# https://github.com/ansible-collections/ansible.posix/blob/main/docs/ansible.posix.authorized_key_module.rst
+- name: 'Public key check'
+  when: 'ans_x_admin_public_key is not defined'
+  fail:
+    msg: "The `ans_x_admin_public_key` is mandatory and was not found"
+
+# Or https://github.com/ansible-collections/ansible.posix/blob/main/docs/ansible.posix.authorized_key_module.rst
 - name: Add SSH key to authorized_keys
   ansible.builtin.copy:
-    content: "{{ ssh_user_key }}"
-    dest: "/home/{{ ssh_user_name }}/.ssh/authorized_keys"
+    content: "{{ ans_x_admin_public_key }}"
+    dest: "/home/{{ ans_x_admin_username }}/.ssh/authorized_keys"
     mode: '0600'
-    owner: "{{ ssh_user_name }}"
+    owner: "{{ ans_x_admin_username }}"

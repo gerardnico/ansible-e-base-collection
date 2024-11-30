@@ -1,0 +1,20 @@
+
+- name: 'Modify hostname'
+  hostname:
+    name: '{{ ans_x_hostname }}'
+
+
+- name: Configure the IP Name
+  # On docker when we test with Molecule,
+  # the /etc/hosts file is blocked. We get this error, and we can;t modify it
+  # The error was: OSError: [Errno 16] Device or resource busy: b'/etc/.ansible_tmpw88krd6thosts' -> b'/etc/hosts'
+  when: 'ansible_virtualization_type is undefined or (ansible_virtualization_type is defined and ansible_virtualization_type != "docker")'
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      {{ item.ip }} {{ item.name }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK Hostname"
+  with_items:
+    - { name: "{{ ans_x_hostname }}  {{ ans_x_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
+
+
