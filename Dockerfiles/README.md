@@ -13,6 +13,25 @@ Without the counterpart python module, ansible tasks will not really work.
 * https://github.com/nmusatti/molecule-docker-images
 * https://hub.docker.com/r/ysebastia/molecule/tags
 
+### SystemD Container
+
+```bash
+docker run \
+  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+  -it \
+  --rm \
+  --privileged \
+  nmusatti/ubuntu2204-pys-systemd \ 
+  /bin/bash
+```
+* https://developers.redhat.com/blog/2014/05/05/running-systemd-within-docker-container
+* Systemd Container: https://ansible.readthedocs.io/projects/molecule/guides/systemd-container/
+* https://github.com/moby/moby/issues/42275
+
+```bash
+docker run --privileged -ti --rm -v /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw ghcr.io/gerardnico/molecule-debian:12.8 /lib/systemd/systemd
+docker run --rm -it -v /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw --tmpfs /run --tmpfs /run/lock warewulf-1:latest /sbin/init
+```
 ### Docker Driver
 
 [The Dockerfile of the docker driver](https://github.com/ansible-community/molecule-plugins/blob/main/src/molecule_plugins/docker/playbooks/Dockerfile.j2)
@@ -35,7 +54,5 @@ The default command is `sleep 1d`
 docker run -rm python:3.12.7-bookworm sleep 1d 
 ```
 
-## Ref
 
-* Systemd Container: https://ansible.readthedocs.io/projects/molecule/guides/systemd-container/
 

@@ -7,6 +7,28 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt install -y python3 sudo bash ca-certificates iproute2 python3-apt aptitude rsync
 
 
+# SystemD
+# https://github.com/geerlingguy/docker-debian11-ansible/blob/master/Dockerfile
+# https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/blob/main/molecule/default/Dockerfile-debian12.j2
+# https://developers.redhat.com/blog/2014/05/05/running-systemd-within-docker-container
+
+RUN apt -y install systemd; \
+(cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*; \
+rm -f /etc/systemd/system/*.wants/*; \
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*; \
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+#VOLUME [ "/sys/fs/cgroup" ]
+
+# The symlink /usr/sbin/init does not exist
+CMD ["/lib/systemd/systemd"]
+
+
+# Clean
 #&& \
 #   echo "==> Make small" && \
 #   apt-get clean && \

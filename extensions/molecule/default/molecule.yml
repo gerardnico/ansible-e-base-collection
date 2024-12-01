@@ -22,11 +22,16 @@ platforms:
   # https://ansible.readthedocs.io/projects/molecule/guides/custom-image/
   # https://ansible.readthedocs.io/projects/molecule/guides/systemd-container/#systemd-container
   - name: molecule-debian
-    image: debian:stretch # ghcr.io/gerardnico/molecule-debian:12.8
+    image: ${ANS_X_MOLECULE_IMAGE:-debian:stretch} # ghcr.io/gerardnico/molecule-debian:12.8
     hostname: kube.example.com
     command: /sbin/init
+    override_command: false
+    privileged: true
+    capabilities:
+      - SYS_ADMIN
     security_opts:
       - seccomp=path/to/seccomp.json
+      - seccomp=unconfined
     tmpfs:
       - /run
       - /tmp
