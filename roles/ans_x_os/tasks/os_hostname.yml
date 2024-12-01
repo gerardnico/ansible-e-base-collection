@@ -1,14 +1,20 @@
 
+
+
 - name: 'Modify hostname'
   hostname:
     name: '{{ ans_x_hostname }}'
 
+- name: 'Check Package Manager'
+  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_hostname'
+  fail:
+    msg: "On a docker container, the hostname is {{ ansible_fqdn }}. It should be set to {{ ans_x_hostname }} via the `hostname` flag"
 
 - name: Configure the IP Name
   # On docker when we test with Molecule,
   # the /etc/hosts file is blocked. We get this error, and we can;t modify it
   # The error was: OSError: [Errno 16] Device or resource busy: b'/etc/.ansible_tmpw88krd6thosts' -> b'/etc/hosts'
-  when: 'ansible_virtualization_type is undefined or (ansible_virtualization_type is defined and ansible_virtualization_type != "docker")'
+  when: 'ansible_virtualization_type != "docker"'
   blockinfile:
     path: /etc/hosts
     block: |
