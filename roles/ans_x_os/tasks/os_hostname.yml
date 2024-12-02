@@ -3,12 +3,12 @@
 
 - name: 'Modify hostname'
   hostname:
-    name: '{{ ans_x_hostname }}'
+    name: '{{ ans_x_os_hostname }}'
 
 - name: 'Check Package Manager'
-  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_hostname'
+  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_os_hostname'
   fail:
-    msg: "On a docker container, the hostname is {{ ansible_fqdn }}. It should be set to {{ ans_x_hostname }} via the `hostname` flag"
+    msg: "On a docker container, the hostname is {{ ansible_fqdn }}. It should be set to {{ ans_x_os_hostname }} via the `hostname` flag"
 
 - name: Configure the IP Name
   # On docker when we test with Molecule,
@@ -24,6 +24,6 @@
       {{ item.ip }} {{ item.name }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK Hostname"
   with_items:
-    - { name: "{{ ans_x_hostname }}  {{ ans_x_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
+    - { name: "{{ ans_x_os_hostname }}  {{ ans_x_os_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
 
 

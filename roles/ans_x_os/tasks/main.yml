@@ -20,15 +20,15 @@
   tags: os-package
 
 - name: Admin User
-  when: ans_x_admin_username is defined
+  when: ans_x_os_admin_username is defined
   become: true
   import_tasks: 'os_admin_user.yml'
   tags: user
 
 - name: 'Fail if hostname is undefined'
-  when: 'ans_x_hostname is undefined'
+  when: 'ans_x_os_hostname is undefined'
   fail:
-    msg: "The `ans_x_hostname` variable should be set."
+    msg: "The `ans_x_os_hostname` variable should be set."
 
 - name: Hostname
   become: true

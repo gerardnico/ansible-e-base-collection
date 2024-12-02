@@ -1,4 +1,4 @@
-- name: Fail if molecule group is missing
+- name: Fail if group is missing
   hosts: localhost
   tasks:
     - name: Assert group existence
@@ -8,41 +8,17 @@
           server group was not found inside inventory groups: {{ groups }}
     - name: Assert all group existence
       ansible.builtin.assert:
-        that: "'all' in groups"
+        that: "'k3s_cluster' in groups"
         fail_msg: |
-          all group was not found inside inventory groups: {{ groups }}
+          k3s_cluster group was not found inside inventory groups: {{ groups }}
 
-- name: OS
-  hosts: all
-  gather_facts: true
-  tasks:
-    - name: Check uname
-      ansible.builtin.raw: uname -a
-      register: result
-      changed_when: false
 
-    - name: Print some info
-      ansible.builtin.assert:
-        that: result.stdout | regex_search("^Linux")
-
-    - name: Executing Os Role
-      ansible.builtin.include_role:
-        name: gerardnico.ansible_x_collection.ans_x_os
-        #tasks_from: main.yml
-      vars:
-        ans_x_admin_username: admin
-        ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
 
 # ansible.builtin.import_playbook: Works only as play
 # It's not a task
 # https://docs.ansible.com/ansible/2.4/playbooks_reuse_includes.html
 # https://forum.ansible.com/t/missing-interpreter-line-for-builtin-modules/4242/3
 - name: Install K3s
-  ansible.builtin.import_playbook: k3s.orchestration.site.yml
-  vars:
-    token: jbHWvQv9261KblczY7BX+OLcnZGrMSe+0UiFS3h7Ozc=
-    k3s_version: v1.31.2+k3s1
-    api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
-    extra_server_args:
-      - "--disable=traefik"
+  ansible.builtin.import_playbook: ans_x.default.kube_x_site.yml
+
 
