@@ -37,6 +37,7 @@ platforms:
     # Inventory group
     groups:
       - server
+      - k3s_cluster # we can't change all
     volumes:
       - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
 
@@ -50,11 +51,9 @@ provisioner:
   name: ansible
   inventory:
     group_vars:
-      all:
+      k3s_cluster:
         ansible_user: root
-        ans_x_os_packages:
-          - curl # needed to download k3s
     host_vars:
       # setting for the docker/platform instance named 'molecule-debian'
       molecule-debian:
-        ans_x_hostname: kube.example.com
+        ans_x_os_hostname: kube.example.com

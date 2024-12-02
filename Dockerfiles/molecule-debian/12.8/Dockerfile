@@ -25,6 +25,10 @@ rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 RUN apt -y install curl # needed to download k3s
 
+RUN apt -y install python3-yaml # needed for Helm Diff Plugin, we should check there
+
+RUN apt -y install procps # for sysctl, required by K3s
+
 # The symlink /usr/sbin/init does not exist
 CMD ["/lib/systemd/systemd"]
 

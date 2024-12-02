@@ -28,17 +28,24 @@
   # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/version_test.html
   when: "installed_ans_x_helm_version is version(ans_x_helm_version, '<')"
   block:
+    # Ref: https://askubuntu.com/questions/1432705/permission-denied-when-executing-exec-on-tmp-ubuntu-22-04
+    - name: Creates tmp directory to avoid sticky problem
+      ansible.builtin.file:
+        path: /tmp/helm
+        state: directory
     # as explained here https://helm.sh/docs/intro/install/#from-script
     - name: Download Helm installation script
-      get_url:
+      # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+      ansible.builtin.get_url:
         url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-        dest: /tmp/get_helm.sh
+        dest: /tmp/helm/get_helm.sh
         mode: '0700'
 
     - name: Run Helm installation script
-      command: /tmp/get_helm.sh
+      # Full command to avoid, no permissions
+      ansible.builtin.command: /usr/bin/env bash /tmp/helm/get_helm.sh
       args:
-        chdir: /tmp
+        chdir: /tmp/helm
 
 # https://github.com/databus23/helm-diff
 # Required to see the changes
