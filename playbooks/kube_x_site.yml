@@ -4,16 +4,16 @@
 
     - name: Executing Os Role
       ansible.builtin.include_role:
-        name: ans_x.default.ans_x_os
+        name: ans_x.ans_x_collection.ans_x_os
 
     - name: Installing Helm
       ansible.builtin.include_role:
-        name: ans_x.default.ans_x_helm
+        name: ans_x.ans_x_collection.ans_x_helm
 
     - name: Installing Longhorn Os Package
       when: 'ans_x_longhorn_version is defined and ans_x_longhorn_version is defined != ""'
       ansible.builtin.include_role:
-        name: ans_x.default.ans_x_longhorn
+        name: ans_x.ans_x_collection.ans_x_longhorn
 
 
 # ansible.builtin.import_playbook: Works only as play
