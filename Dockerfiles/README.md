@@ -15,24 +15,18 @@ Without the counterpart python module, ansible tasks will not really work.
 
 ### SystemD Container
 
-```bash
-docker run \
-  -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-  -it \
-  --rm \
-  --privileged \
-  nmusatti/ubuntu2204-pys-systemd \ 
-  /bin/bash
-```
-* https://developers.redhat.com/blog/2014/05/05/running-systemd-within-docker-container
-* Systemd Container: https://ansible.readthedocs.io/projects/molecule/guides/systemd-container/
-* https://github.com/moby/moby/issues/42275
 
 ```bash
 docker run --privileged -ti --rm -v /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw ghcr.io/gerardnico/molecule-debian:12.8 /lib/systemd/systemd
-docker run --rm -it -v /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw --tmpfs /run --tmpfs /run/lock warewulf-1:latest /sbin/init
 ```
+
+Ref:
+* https://developers.redhat.com/blog/2014/05/05/running-systemd-within-docker-container
+* Systemd Container: https://ansible.readthedocs.io/projects/molecule/guides/systemd-container/
+
 ### Docker Driver
+
+https://ansible.readthedocs.io/projects/molecule/guides/custom-image/
 
 [The Dockerfile of the docker driver](https://github.com/ansible-community/molecule-plugins/blob/main/src/molecule_plugins/docker/playbooks/Dockerfile.j2)
 

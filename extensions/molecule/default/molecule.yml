@@ -19,24 +19,26 @@ platforms:
   # There is also a docker driver which is completely other thing
   # https://github.com/ansible-community/molecule-plugins/tree/main/src/molecule_plugins/docker
   #
-  # https://ansible.readthedocs.io/projects/molecule/guides/custom-image/
-  # https://ansible.readthedocs.io/projects/molecule/guides/systemd-container/#systemd-container
+
   - name: molecule-debian
-    image: ${ANS_X_MOLECULE_IMAGE:-debian:stretch} # ghcr.io/gerardnico/molecule-debian:12.8
+    image: ghcr.io/gerardnico/molecule-debian:12.8
     hostname: kube.example.com
-    command: /sbin/init
+    pre_build_image: true
     override_command: false
     privileged: true
-    capabilities:
-      - SYS_ADMIN
-    security_opts:
-      - seccomp=path/to/seccomp.json
-      - seccomp=unconfined
+    published_ports:
+      - "6443:6443"
+      - "80:80"
+      - "443:443"
+    # Why run and tmp as tmpfs ???
     tmpfs:
       - /run
       - /tmp
+    # Inventory group
+    groups:
+      - server
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
 
 dependency:
   name: galaxy
@@ -44,10 +46,15 @@ dependency:
     # Path relative to where you start molecule
     # ie from extensions
     requirements-file: molecule/default/requirements.yml
-#provisioner:
-#  name: ansible
-#  config_options:
-    # defaults:
-      # https://ansible.readthedocs.io/projects/dev-tools/user-guide/testing/#molecule
-      # collections_path: ${ANSIBLE_COLLECTIONS_PATH}
-      # In bash: export ANSIBLE_COLLECTIONS_PATH=/home/user/working/collections
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        ansible_user: root
+        ans_x_os_packages:
+          - curl # needed to download k3s
+    host_vars:
+      # setting for the docker/platform instance named 'molecule-debian'
+      molecule-debian:
+        ans_x_hostname: kube.example.com

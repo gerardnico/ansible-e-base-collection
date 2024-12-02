@@ -14,6 +14,9 @@
   # On docker when we test with Molecule,
   # the /etc/hosts file is blocked. We get this error, and we can;t modify it
   # The error was: OSError: [Errno 16] Device or resource busy: b'/etc/.ansible_tmpw88krd6thosts' -> b'/etc/hosts'
+  #
+  # They mount it, we could check that ??
+  # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#parameter-etc_hosts
   when: 'ansible_virtualization_type != "docker"'
   blockinfile:
     path: /etc/hosts

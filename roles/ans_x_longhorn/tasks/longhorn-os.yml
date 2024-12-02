@@ -1,0 +1,39 @@
+# https://longhorn.io/docs/1.6.2/deploy/install/#installation-requirements
+
+- name: "Longhorn - Install Prerequisites Packages"
+  ansible.builtin.apt:
+    pkg:
+      - bash
+      - curl
+      - util-linux # findmnt, blkid, lsblk
+      - grep
+      - gawk # awk
+      - nfs-common # added because required by the check script
+      - "open-iscsi"
+    state: present
+
+# Disable `rpcbind`, see `rpcbind-port-mapper-111.md`
+# started and installed by nfs-common.
+- name: Longhorn - Disable rpcbind (ie port mapper)
+  block:
+  - name: Longhorn - Disable rpcbind.service
+    ansible.builtin.systemd_service:
+      name: rpcbind
+      state: stopped
+      enabled: no # Whether the unit should start on boot
+  - name: Longhorn - Disable rpcbind.socket
+    ansible.builtin.systemd_service:
+      name: rpcbind.socket
+      state: stopped
+      enabled: no # Whether the unit should start on boot
+
+# https://longhorn.io/docs/1.6.2/deploy/install/#using-the-environment-check-script
+- name: Longhorn - Run Environment check
+  shell: 'curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v{{ ans_x_longhorn_version }}/scripts/environment_check.sh | bash'
+  register: command_output
+  failed_when: "'error' in command_output.stdout | lower"
+  # Allow only 1 concurrent process to run (ie serial)
+  # because the check process create a pod
+  throttle: 1
+  # never report a change
+  changed_when: false

@@ -42,5 +42,7 @@
   vars:
     token: jbHWvQv9261KblczY7BX+OLcnZGrMSe+0UiFS3h7Ozc=
     k3s_version: v1.31.2+k3s1
+    api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
     extra_server_args:
       - "--disable=traefik"
+

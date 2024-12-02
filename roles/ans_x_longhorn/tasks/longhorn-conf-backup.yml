@@ -1,0 +1,22 @@
+# https://longhorn.io/docs/1.6.2/snapshots-and-backups/backup-and-restore/set-backup-target/
+
+- name: 'Longhorn - Recurring Daily Backup'
+  run_once: true
+  kubernetes.core.k8s:
+    state: present
+    template: longhorn-backup.yml
+
+- name: 'Longhorn - Create s3 secret'
+  run_once: true
+  kubernetes.core.k8s:
+    state: present
+    template: longhorn-secret-s3.yml
+
+
+
+# This is a job (executed only once)
+# https://longhorn.io/docs/1.6.2/advanced-resources/system-backup-restore/backup-longhorn-system/#using-kubectl-command
+#- name: 'Longhorn - System backup'
+#  kubernetes.core.k8s:
+#    state: present
+#    template: longhorn-system-backup.yml

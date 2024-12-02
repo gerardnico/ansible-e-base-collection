@@ -1,0 +1,20 @@
+- name: Longhorn - Add Ingress to frontend
+  when: 'ans_x_longhorn_hostname is defined and ans_x_longhorn_hostname != ""'
+  run_once: true
+  kubernetes.core.k8s:
+    state: present
+    #force: true # replaced, not patched
+    #    validate:
+    #      fail_on_error: no
+    #      strict: yes
+    kubeconfig: '{{ kubeconfig  }}'
+    template: longhorn-frontend-ingress.yml
+
+# Should happen via the chart values
+#- name: 'Longhorn - Update storage class'
+#  when: 1 == 0
+#  run_once: true
+#  kubernetes.core.k8s:
+#    state: present
+#    template: longhorn-configmap-storage-class.yml
+

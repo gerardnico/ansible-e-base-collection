@@ -1,0 +1,44 @@
+# https://longhorn.io/docs/1.6.2/references/examples/#storageclass
+# Changing the storage class works with a config Map
+# https://github.com/longhorn/longhorn/issues/440
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: longhorn-storageclass
+  namespace: '{{ ans_x_longhorn_namespace }}'
+data:
+  storageclass.yaml: |
+    kind: StorageClass
+    apiVersion: storage.k8s.io/v1
+    metadata:
+      name: longhorn
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: driver.longhorn.io
+    allowVolumeExpansion: true
+    reclaimPolicy: "Delete"
+    volumeBindingMode: Immediate
+    parameters:
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "30" # 2880" is 48 hours in minutes
+      fromBackup: ""
+      fsType: "ext4"
+      dataLocality: "strict-local"
+      unmapMarkSnapChainRemoved: "ignored"
+  #  mkfsParams: "-I 256 -b 4096 -O ^metadata_csum,^64bit"
+  #  backingImage: "bi-test"
+  #  backingImageDataSourceType: "download"
+  #  backingImageDataSourceParameters: '{"url": "https://backing-image-example.s3-region.amazonaws.com/test-backing-image"}'
+  #  backingImageChecksum: "SHA512 checksum of the backing image"
+  #  diskSelector: "ssd,fast"
+  #  nodeSelector: "storage,fast"
+  #  recurringJobSelector: '[
+  #   {
+  #     "name":"snap",
+  #     "isGroup":true,
+  #   },
+  #   {
+  #     "name":"backup",
+  #     "isGroup":false,
+  #   }
+  #  ]'

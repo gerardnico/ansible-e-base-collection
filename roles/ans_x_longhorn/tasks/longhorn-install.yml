@@ -1,0 +1,71 @@
+- name: Create Longhorn namespace
+  # run_once: run on the first host available
+  run_once: true
+  kubernetes.core.k8s:
+    name: "{{ ans_x_longhorn_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+    kubeconfig: '{{ kubeconfig }}'
+
+- name: Add Longhorn Helm repository
+  # run_once: run on the first host available
+  run_once: true
+  register: longhorn_helm_repo
+  kubernetes.core.helm_repository:
+    name: "longhorn"
+    repo_url: "https://charts.longhorn.io"
+    kubeconfig: '{{ kubeconfig }}'
+
+# VARIABLE IS NOT DEFINED! if not executed
+- name: Add Helm repository (command executed if any)
+  run_once: true
+  when:
+    - longhorn_helm_repo.command is defined
+  ansible.builtin.debug:
+    var: longhorn_helm_repo.command
+
+- name: Update Helm repositories
+  run_once: true
+  command: helm repo update
+
+# Note the basic deployment without options
+# is here:
+# kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.6.2/deploy/longhorn.yaml
+#
+- name: Helm (Deploy Longhorn)
+  # run_once: run on the first host available
+  run_once: true
+  register: longhorn_helm
+  kubernetes.core.helm:
+    # helm release name
+    release_name: longhorn
+    # repo/name, helm chart name
+    chart_ref: longhorn/longhorn
+    chart_version: '{{ ans_x_longhorn_version }}'
+    release_state: present
+    release_namespace: '{{ ans_x_longhorn_namespace }}'
+    create_namespace: true
+    kubeconfig: '{{ kubeconfig }}'
+    release_values: '{{ ans_x_longhorn_chart_values }}'
+
+- name: 'Log: Command executed by the previous helm command'
+  run_once: true
+  ansible.builtin.debug:
+    # example from 1.6.2 to 1.7.0
+    # /usr/local/bin/helm --version=1.7.0 upgrade -i --reset-values --create-namespace -f=/tmp/tmpchf97jog.yml longhorn longhorn/longhorn
+    var: longhorn_helm.command
+
+#- name: Waiting until Longhorn pod is ready
+#  kubernetes.core.k8s_info:
+#    api_version: apps/v1
+#    kind: Deployment
+#    namespace: "{{ cert_manager_namespace }}"
+#    kubeconfig: '{{ kubeconfig }}'
+#    label_selectors:
+#      - app=webhook
+#  register: cert_manager_webhook_deployment_status
+#  until: (cert_manager_webhook_deployment_status.resources[0].status.readyReplicas | default(0) | int) >= 1
+#  retries: 4
+#  delay: 5
+

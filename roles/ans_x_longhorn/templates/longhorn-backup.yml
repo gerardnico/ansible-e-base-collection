@@ -1,0 +1,25 @@
+# https://longhorn.io/docs/1.6.2/snapshots-and-backups/scheduling-backups-and-snapshots/#using-the-manifest
+apiVersion: longhorn.io/v1beta1
+kind: RecurringJob
+metadata:
+  name: longhorn-backup
+  namespace: longhorn-system
+spec:
+  cron: "{{ ans_x_recurring_job_cron }}"
+  # Task
+  # backup: periodically create snapshots then do backups after cleaning up outdated snapshots
+  # backup-force-create: periodically create snapshots the do backups
+  # snapshot: periodically create snapshots after cleaning up outdated snapshots
+  # snapshot-force-create: periodically create snapshots
+  # snapshot-cleanup: periodically purge removable snapshots and system snapshots
+  # snapshot-delete: periodically remove and purge all kinds of snapshots that exceed the retention count.
+  # filesystem-trim: periodically trim filesystem to reclaim disk space
+  task: "backup"
+  groups:
+    - default
+    - group1
+  retain: 3
+  concurrency: 2
+  labels:
+    label/1: a
+    label/2: b

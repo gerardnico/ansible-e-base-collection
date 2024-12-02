@@ -1,0 +1,51 @@
+- name: Install Git (required for plugin installation)
+  ansible.builtin.package:
+    name: git
+    state: present
+
+- name: Get helm installed version
+  ansible.builtin.shell: helm version | grep -oP 'Version:"v\K[0-9.]+'
+  register: ans_x_helm_version_output
+  changed_when: false
+  ignore_errors: yes
+
+
+- name: Set helm installed version
+  when: ans_x_helm_version_output.rc == 0
+  set_fact:
+    installed_ans_x_helm_version: '{{ ans_x_helm_version_output.stdout }}'
+
+- name: Set helm installed version
+  when: ans_x_helm_version_output.rc != 0
+  set_fact:
+    installed_ans_x_helm_version: '0'
+
+- name: helm version {{ installed_ans_x_helm_version }}
+  debug:
+    var: installed_ans_x_helm_version
+
+- name: Update node only if needed
+  # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/version_test.html
+  when: "installed_ans_x_helm_version is version(ans_x_helm_version, '<')"
+  block:
+    # as explained here https://helm.sh/docs/intro/install/#from-script
+    - name: Download Helm installation script
+      get_url:
+        url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        dest: /tmp/get_helm.sh
+        mode: '0700'
+
+    - name: Run Helm installation script
+      command: /tmp/get_helm.sh
+      args:
+        chdir: /tmp
+
+# https://github.com/databus23/helm-diff
+# Required to see the changes
+# by Ansible Kubernetes
+# [WARNING]: The default idempotency check can fail to report changes in certain
+# cases. Install helm diff >= 3.4.1 for better results.
+- name: Install Helm Diff plugin
+  kubernetes.core.helm_plugin:
+    plugin_path: https://github.com/databus23/helm-diff
+    state: present

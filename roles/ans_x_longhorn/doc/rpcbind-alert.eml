@@ -1,0 +1,198 @@
+Delivered-To: nico@eraldy.com
+Received: by 2002:a05:6838:b598:b0:858:1dcd:bad1 with SMTP id n24csp2263598nkp;
+        Tue, 2 Jul 2024 23:51:49 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFJ6RsRpS+QVX4uaVvRT4IbyaWMEV7GzuPt1BA/MVwn8RjGgZHdIlg86JR/NOlMUlDQgFHz
+X-Received: by 2002:a05:6402:27c7:b0:58c:eee0:490b with SMTP id 4fb4d7f45d1cf-58ceee04c28mr539781a12.1.1719989509149;
+        Tue, 02 Jul 2024 23:51:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1719989509; cv=none;
+        d=google.com; s=arc-20160816;
+        b=DuC4KV5vMUPJpBo4aJF2vQATxeIeV82y2wb59v1BrsIF8tqsjABWRbjaH7klHc8xlP
+         2w/kpeEOa5lbdCeoJPqfGM3lDpYiABGdpC/b/lPj1am5IUKDU0HfeJ7eeIEmvZwuQKzt
+         5u9Lb5J4pcr1H/J1AYSNx39XLTAg7EzITZo8DYr7dKdhuq5/qFN+jz6HLsdCko52e9Bw
+         0dIEncZ+gWbbColqthOHiI9dcTxYmRLRY8Lkyo3PHIewha4sgBxYrvXM26O/d/2lHL13
+         VHULCXrorXzSyM1gpDJUnRt581GWciRPEBouqxNMvl3XHT8E/RH54daBpMD8g4HhqUjo
+         1SRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=charset:content-transfer-encoding:mime-version:subject:message-id
+         :to:reply-to:from:date:dkim-signature;
+        bh=qaKyz6nnnz72yC5MCGuMoHqNpYJlvbxOUfkGEYxtjp0=;
+        fh=BKIAyvXA2uY/owV3Kpi+jV7Q+nfUpbubGi7OAwuOycg=;
+        b=XAIbS89h2dN4Qfe8NSDLgVXI7EDSDr62JjT6MNOWi3XqG+zmAOzNSIUlDlc6m2TVsX
+         GG0M7Mup8X7StVPdfx6wj+Uonchd86UbusBvBL82RR4YpgF1ySIWK+UMiuacUMCxqCHV
+         BDmoHr2qiiL3p1NjuvH3VfggGA0Ono1i21WJ7g/tqefRFHQNSd+C21SwmmrvB8QQe8fl
+         yOHZl/EYF4yyBYk5lTBxDk/sWKYYwXLVzcLg4xpd9wxeDEHvdFIBVxLY9uXxAVUOv8Dh
+         PKl453SJo9mnxjJ0vy8a6iFMc4/Zlp4kpK3zmicCdG9JOJGuMqAGuzCuAsWvIBlYtova
+         uxdw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@hetzner.com header.s=lms2212 header.b=BKIBJFeq;
+       spf=pass (google.com: domain of abuse@hetzner.com designates 2a01:4f8:d0a:203a::1 as permitted sender) smtp.mailfrom=abuse@hetzner.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=hetzner.com
+Return-Path: <abuse@hetzner.com>
+Received: from mail.hetzner.company (mail.hetzner.company. [2a01:4f8:d0a:203a::1])
+        by mx.google.com with ESMTPS id 4fb4d7f45d1cf-58d4657e340si68811a12.478.2024.07.02.23.51.48
+        for <nico@eraldy.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jul 2024 23:51:49 -0700 (PDT)
+Received-SPF: pass (google.com: domain of abuse@hetzner.com designates 2a01:4f8:d0a:203a::1 as permitted sender) client-ip=2a01:4f8:d0a:203a::1;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@hetzner.com header.s=lms2212 header.b=BKIBJFeq;
+       spf=pass (google.com: domain of abuse@hetzner.com designates 2a01:4f8:d0a:203a::1 as permitted sender) smtp.mailfrom=abuse@hetzner.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=hetzner.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hetzner.com
+	; s=lms2212; h=Content-Transfer-Encoding:Content-Type:Mime-Version:Subject:
+	Message-ID:To:Reply-To:From:Date:Sender:Cc:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References; bh=qaKyz6nnnz72yC5MCGuMoHqNpYJlvbxOUfkGEYxtjp0=; b=BK
+	IBJFeq7fU9HyfAanz2K3HmGAVE2tBUhEzl92bye8/jfVWiDfrbz/FvYEWXZib5g+IoPlCflr8StOU
+	fntjq22BFMH+xSlyOb10l+m8ZvDNHoy06J/Samsz028ghgVB1PckcY9SNyOqzIzsRn0VPl/vUBRUb
+	FJgUk2ka7w6CMd4CsTRzMvby3iyKs5mRIXSP4J4IGcWSh7qJg6PLT/a65Wk4gClxxiYzDk5+OZ8Lg
+	8ZGCFIh1K/W69eJQC+pgPJPTskNGQpV3hrszb4HWJ/uB7Pf4XqhVniClsZssWuYrJ5xZquP+1xtwD
+	xQDAVz/R5/V0kX9WwcYhz/CMhEYUUWcg==;
+Received: from fsn1-vpn.hetzner.com ([88.198.139.25] helo=abuse.hetzner.company)
+	by mail.hetzner.company with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.94.2)
+	(envelope-from <abuse@hetzner.com>)
+	id 1sOtqG-00BofC-PV; Wed, 03 Jul 2024 08:51:48 +0200
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by abuse.hetzner.company (Postfix) with ESMTP id DD21C1E15E3;
+	Wed,  3 Jul 2024 08:45:59 +0200 (CEST)
+Date: Wed, 03 Jul 2024 08:45:59 +0200
+From: abuse@hetzner.com
+Reply-To: abuse@hetzner.com
+To: nico@eraldy.com, 
+ gerardnico@gmail.com
+Message-ID: <6684f3a7dcc78_12cc2b09b35523f49794842@abuse.hetzner.company.mail>
+Subject: [AbuseID:E2FF26:27]: AbuseBSI: [CB-Report#20240703-10007271] Offene
+ Portmapper-Dienste in AS24940
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Hetzner-AbuseID: E2FF26:27
+Charset: UTF-8
+X-Authenticated-Sender: abuse-queue@hetzner.com
+
+Dear Mr Nicolas GERARD,
+
+We have received a notification from the German Federal Office for Inform=
+ation Security (BSI) for (the IP address of) a server you have with us. W=
+e are automatically forwarding this notification on to you, for your info=
+rmation.
+
+The original report has been included below. Additional information is pr=
+ovided with the how-to guides referenced in the report. Please note that =
+we do not have any further information to share.
+
+These notifications do not mean your server was involved in any abusive a=
+ctivity. They are simply alerting you to a potential issue on your server=
+, that could be exploited, and that is usually fairly easy to secure.
+
+You do not need to send us, or the BSI, a response.
+
+In case of further questions, please contact certbund@bsi.bund.de and kee=
+p the ticket number of the original report [CB-Report#...] in the subject=
+ line. Do not reply to <reports@reports.cert-bund.de> as this is just the=
+ sender address for the reports and messages sent to this address will no=
+t be read.
+
+Kind regards
+
+Abuse Team
+
+Hetzner Online GmbH
+Industriestr. 25
+91710 Gunzenhausen / Germany
+Tel: +49 9831 5050
+Fax: +49 9831 5053
+www.hetzner.com
+
+Register Court: Registergericht Ansbach, HRB 6089
+CEO: Martin Hetzner, Stephan Konvickova, G=C3=BCnther M=C3=BCller
+
+You have the option of making an appeal against a negative decision.
+To do that, please reply directly to this ticket. If this is the Abuse
+Team=E2=80=99s final decision, you can also make a complaint by writing t=
+o
+info@hetzner.com. The European Commission also provides a
+platform that you can use as a platform for online dispute resolution
+(ODR) at http://ec.europa.eu/consumers/odr. We are neither willing
+nor required to participate in a dispute resolution process before a
+consumer arbitration board.
+
+For the purposes of this communication, we may save some of your
+personal data. For information on our data privacy policy, please see:
+www.hetzner.com/privacy-policy-notice
+
+> Dear Sir or Madam,
+> =
+
+> the Portmapper service (portmap, rpcbind) is required for mapping RPC
+> requests to a network service. The Portmapper service is needed e.g.
+> for mounting network shares using the Network File System (NFS).
+> The Portmapper service runs on port 111 tcp/udp.
+> =
+
+> In addition to being abused for DDoS reflection attacks, the
+> Portmapper service can be used by attackers to obtain information
+> on the target network like available RPC services or network shares.
+> =
+
+> Over the past months, systems responding to Portmapper requests from
+> anywhere on the Internet have been increasingly abused DDoS reflection
+> attacks against third parties.
+> =
+
+> Please find below a list of affected systems hosted on your network.
+> The timestamp (timezone UTC) indicates when the openly accessible
+> Portmapper service was identified.
+> =
+
+> We would like to ask you to check this issue and take appropriate
+> steps to secure the Portmapper services on the affected systems or
+> notify your customers accordingly.
+> =
+
+> If you have recently solved the issue but received this notification
+> again, please note the timestamp included below. You should not
+> receive any further notifications with timestamps after the issue
+> has been solved.
+> =
+
+> Additional information on this notification, advice on how to fix
+> reported issues and answers to frequently asked questions:
+> <https://reports.cert-bund.de/en/>
+> =
+
+> This message is digitally signed using PGP.
+> Information on the signature key is available at:
+> <https://reports.cert-bund.de/en/digital-signature>
+> =
+
+> Please note:
+> This is an automatically generated message. Replies to the
+> sender address <reports@reports.cert-bund.de> will NOT be read
+> but silently be discarded. In case of questions, please contact
+> <certbund@bsi.bund.de> and keep the ticket number [CB-Report#...]
+> of this message in the subject line.
+> =
+
+> Affected systems on your network:
+> =
+
+> Format: ASN | IP | Timestamp (UTC) | RPC response
+>  24940 | 188.245.43.250 | 2024-07-02 03:54:12 | 100000 4 111/udp; 10000=
+0 3 111/udp; 100000 2 111/udp; 100000 4 111/udp; 100000 3 111/udp; 100000=
+ 2 111/udp;
+> =
+
+> Mit freundlichen Gr=C3=BC=C3=9Fen / Kind regards
+> Team CERT-Bund
+> =
+
+> Bundesamt f=C3=BCr Sicherheit in der Informationstechnik
+> Federal Office for Information Security (BSI)
+> CERT-Bund
+> Godesberger Allee 87, 53175 Bonn, Germany
+> =
+
