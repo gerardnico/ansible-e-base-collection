@@ -26,4 +26,7 @@
     token: '{{ ans_x_k3s_token }}'
     k3s_version: '{{ ans_x_k3s_version }}'
     api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
-    extra_server_args: '{{ ans_x_k3s_extra_server_args + ["--disable=traefik"] }}'
+    extra_server_args: '{{ (ans_x_k3s_extra_server_args | default([])) + ["--disable=traefik"] }}'
+
+# Controle Node
+# https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145

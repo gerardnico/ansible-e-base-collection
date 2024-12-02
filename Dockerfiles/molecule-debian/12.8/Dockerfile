@@ -1,4 +1,6 @@
-
+# Kind (Kube in docker)
+# https://kind.sigs.k8s.io/docs/user/quick-start/#building-images
+# https://github.com/kubernetes-sigs/kind/blob/74acdf744a3566279ddf7e4d7d2e2b364b1ec5bd/images/base/Dockerfile#L4
 FROM debian:12.8
 
 # Copy of https://github.com/ansible-community/molecule-plugins/blob/main/src/molecule_plugins/docker/playbooks/Dockerfile.j2
@@ -28,6 +30,10 @@ RUN apt -y install procps # for sysctl, required by K3s
 
 
 RUN apt -y install python3-yaml # needed for Helm Diff Plugin, we should check there
+
+# https://docs.k3s.io/advanced#running-k3s-in-docker
+# Waiting for control-plane node kube.example.com startup: nodes \"kube.example.com\" not found
+RUN apt-get install -y kmod iptables
 
 
 # The symlink /usr/sbin/init does not exist

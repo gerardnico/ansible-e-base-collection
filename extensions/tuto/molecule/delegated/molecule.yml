@@ -33,7 +33,7 @@ dependency:
   options:
     # Path relative to where you start molecule
     # ie from extensions
-    requirements-file: molecule/default/requirements.yml
+    requirements-file: requirements.yml
 #provisioner:
 #  name: ansible
 #  config_options:

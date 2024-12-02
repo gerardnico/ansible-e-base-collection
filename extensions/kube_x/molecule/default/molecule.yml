@@ -19,10 +19,9 @@ platforms:
   # There is also a docker driver which is completely other thing
   # https://github.com/ansible-community/molecule-plugins/tree/main/src/molecule_plugins/docker
   #
-
-  - name: molecule-debian
-    image: ghcr.io/gerardnico/molecule-debian:12.8
-    hostname: kube.example.com
+  - name: '${DOCK_X_CONTAINER}'
+    image: '${DOCK_X_REGISTRY}/${DOCK_X_NAMESPACE}/${DOCK_X_NAME}:${DOCK_X_TAG}'
+    hostname: '${ANS_X_OS_HOSTNAME}'
     pre_build_image: true
     override_command: false
     privileged: true
@@ -36,8 +35,8 @@ platforms:
       - /tmp
     # Inventory group
     groups:
-      - server
-      - k3s_cluster # we can't change all
+      - '${ANS_X_INVENTORY_GROUP_SERVER}'
+      - '${ANS_X_INVENTORY_GROUP_ALL}'
     volumes:
       - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
 
@@ -52,8 +51,12 @@ provisioner:
   inventory:
     group_vars:
       k3s_cluster:
-        ansible_user: root
+        ansible_user: root # mandatory
+        ans_x_admin_username: admin
+        ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
+        ans_x_k3s_token: jbHWvxxxx
+        ans_x_k3s_version: v1.31.2+k3s1
     host_vars:
       # setting for the docker/platform instance named 'molecule-debian'
-      molecule-debian:
+      molecule-server-debian:
         ans_x_os_hostname: kube.example.com

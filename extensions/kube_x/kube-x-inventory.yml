@@ -1,13 +1,15 @@
+# Example of inventory.
+
 # k3s_cluster can't be changed (hardcoded in dependent package)
 k3s_cluster:
   vars:
+    ansible_user: root # the user where the kubeconfig is copied
     ans_x_admin_username: admin
     ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
-    ans_x_k3s_token: jbHWvQv9261KblczY7BX+OLcnZGrMSe+0UiFS3h7Ozc=
+    # Not mandatory
+    # Set on the server at: /var/lib/rancher/k3s/server/token
+    ans_x_k3s_token: jbHWvxxxx
     ans_x_k3s_version: v1.31.2+k3s1
-    api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
-    extra_server_args:
-      - "--disable=traefik"
   children:
     # server name can't be changed (hardcoded in dependent package)
     server:
@@ -16,6 +18,8 @@ k3s_cluster:
       hosts:
         kube_server_01:
           ans_x_hostname: kube.example.com
+      vars:
+        # ans_x_k3s_extra_server_args: # optional
 #    agent:
 #      hosts:
 #        192.16.35.12:
