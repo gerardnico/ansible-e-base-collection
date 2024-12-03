@@ -1,6 +1,13 @@
 # Molecule Testing for Kube-X
 
 
+## Results: Scenario
+
+* The [docker scenario](molecule/docker/README.md) run successfully but there is a [network problem](molecule/docker/README.md#docker-bug)
+  and there is no nodes in the cluster (Same problem with the kind image or my image)
+* The vagrant does not work because we work with docker, and it does not found any vagrant.
+
+
 ## Run
 
 ### Docker Scenario
@@ -8,14 +15,12 @@
 ```bash
 # go to the project dir
 cd extensions/kube_x
-molecule converge -s docker
+# Always reset, otherwise, it's too much pain because of the cache 
+molecule -e .env.yml reset -s docker && molecule -e .env.yml converge -s docker
+# destroy
 molecule destroy -s docker
 ```
 
-## Results: Scenario
-
-* The [docker scenario](molecule/docker/README.md) run successfully but there is a [network problem](molecule/docker/README.md#docker-bug) and there is no nodes in the cluster
-* The vagrant does not work because we work with docker, and it does not found any vagrant.
 
 
 ## Molecule Project directory

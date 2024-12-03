@@ -1,5 +1,5 @@
-# https://ansible.readthedocs.io/projects/molecule/getting-started/#inspecting-the-moleculeyml
 ---
+# https://ansible.readthedocs.io/projects/molecule/getting-started/#inspecting-the-moleculeyml
 # Driver provider
 # https://ansible.readthedocs.io/projects/molecule/configuration/#driver
 #
@@ -21,7 +21,7 @@ platforms:
   #
   - name: '${DOCK_X_CONTAINER}'
     image: '${DOCK_X_REGISTRY}/${DOCK_X_NAMESPACE}/${DOCK_X_NAME}:${DOCK_X_TAG}'
-    #hostname: '${ANS_X_OS_HOSTNAME}'
+    hostname: '${ANS_X_OS_HOSTNAME}'
     pre_build_image: true
     override_command: false
     privileged: true
@@ -40,8 +40,8 @@ platforms:
     groups:
       - '${ANS_X_INVENTORY_GROUP_SERVER}'
       - '${ANS_X_INVENTORY_GROUP_ALL}'
-    volumes:
-      - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
+    #volumes:
+    #  - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
 
 dependency:
   name: galaxy
@@ -60,7 +60,7 @@ provisioner:
         ans_x_k3s_version: v1.31.2+k3s1
     host_vars:
       # setting for the docker/platform instance named 'molecule-debian'
-      molecule-server-debian:
-        ans_x_os_hostname: kube.example.com
+      ${DOCK_X_CONTAINER}:
+        ans_x_os_hostname: '${ANS_X_OS_HOSTNAME}'
   playbooks:
     converge: ../playbooks/converge.yml
