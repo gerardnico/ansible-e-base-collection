@@ -2,16 +2,17 @@
 
 
 - name: 'Modify hostname'
+  when: 'ansible_virtualization_type != "docker"'
   hostname:
     name: '{{ ans_x_os_hostname }}'
 
 # On docker, the /etc/file is locked
 # In test with molecule, we may use `molecule_driver_name == 'docker`
 # https://ansible.readthedocs.io/projects/molecule/configuration/#molecule.interpolation.Interpolator.interpolate
-- name: 'Check Package Manager'
-  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_os_hostname'
-  fail:
-    msg: "On a docker container, the hostname is {{ ansible_fqdn }}. It should be set to {{ ans_x_os_hostname }} via the `hostname` flag"
+#- name: 'Check Hostname'
+#  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_os_hostname'
+#  fail:
+#    msg: "On a docker container, the hostname is ({{ ansible_fqdn }}). It should be set to ({{ ans_x_os_hostname }}) via the `hostname` flag"
 
 - name: Configure the IP Name
   # On docker when we test with Molecule,

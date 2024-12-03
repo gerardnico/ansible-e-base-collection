@@ -13,9 +13,10 @@ The kubeconfig is then available at: `~/.kube/config.new` (by default `kubeconfi
 On server: `/etc/rancher/k3s/k3s.yaml`
 
 
-Play reference:
-* [kubeconfig Var Ref](https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/defaults/main.yml#L5C13-L5C31)
-* [Copy Tasks Ref](https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145)
+Reference:
+* [README kubeconfig](https://github.com/k3s-io/k3s-ansible?tab=readme-ov-file#kubeconfig)
+* [Play kubeconfig Var Ref](https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/defaults/main.yml#L5C13-L5C31)
+* [Play Copy Tasks Ref](https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145)
 
 Update the config
 ```bash
