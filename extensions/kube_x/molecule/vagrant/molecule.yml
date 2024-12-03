@@ -1,0 +1,12 @@
+
+# Vagrant https://github.com/ansible-community/molecule-plugins/tree/main/doc/vagrant#documentation
+driver:
+  name: vagrant
+  provider:
+    name: libvirt
+platforms:
+  - name: instance-1
+    hostname: instance.example.com
+    box: ${TESTBOX:-debian/jessie64}
+    memory: 256
+    cpus: 1

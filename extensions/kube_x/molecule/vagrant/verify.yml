@@ -1,0 +1,13 @@
+# https://raw.githubusercontent.com/ansible-community/molecule-vagrant/refs/heads/main/molecule_vagrant/test/scenarios/molecule/hostname/verify.yml
+---
+- name: Check instance-1
+  hosts: instance-1
+  gather_facts: true
+  gather_subset:
+    - min
+  tasks:
+    - name: Ensure that host name is instance-1
+      ansible.builtin.assert:
+        that:
+          - ansible_fqdn == "instance.example.com"
+

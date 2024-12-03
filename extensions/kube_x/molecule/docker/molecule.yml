@@ -46,9 +46,8 @@ platforms:
 dependency:
   name: galaxy
   options:
-    # Path relative to where you start molecule
-    # ie from extensions
-    requirements-file: molecule/default/requirements.yml
+    # Path relative to the project directory (from where you start molecule)
+    requirements-file: molecule/docker/requirements.yml
 provisioner:
   name: ansible
   inventory:
@@ -63,3 +62,5 @@ provisioner:
       # setting for the docker/platform instance named 'molecule-debian'
       molecule-server-debian:
         ans_x_os_hostname: kube.example.com
+  playbooks:
+    converge: ../playbooks/converge.yml
