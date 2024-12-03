@@ -2,6 +2,7 @@
 ## Steps
 
 ### Run the playbook
+
 ```bash
 ansible-playbook playbooks/kube-x.yml -i ../extensions/kube_x/kube-x-inventory.yml
 ```
