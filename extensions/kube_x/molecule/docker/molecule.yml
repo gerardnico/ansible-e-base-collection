@@ -25,6 +25,10 @@ platforms:
     pre_build_image: true
     override_command: false
     privileged: true
+    # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#parameter-network_mode
+    # Network should be created with `docker network create kube`
+    # `nslookup kube.example.com` should return an ip
+    network_mode: kube
     # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#parameter-etc_hosts
 #    etc_hosts:
 #      ${ANS_X_OS_HOSTNAME}: 127.0.0.1
@@ -40,7 +44,9 @@ platforms:
     groups:
       - '${ANS_X_INVENTORY_GROUP_SERVER}'
       - '${ANS_X_INVENTORY_GROUP_ALL}'
-    #volumes:
+    volumes:
+       # /var/lib/rancher has to be a local filesystem such as ext4 or XFS.
+       - /tmp/var/lib/rancher:/var/lib/rancher
     #  - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
 
 dependency:
