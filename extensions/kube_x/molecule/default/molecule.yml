@@ -68,5 +68,5 @@ provisioner:
       # setting for the docker/platform instance named 'molecule-debian'
       ${DOCK_X_CONTAINER}:
         ans_x_os_hostname: '${ANS_X_OS_HOSTNAME}'
-  playbooks:
-    converge: ../playbooks/converge.yml
+#  playbooks:
+#    converge: ../playbooks/converge.yml

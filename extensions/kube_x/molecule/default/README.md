@@ -6,12 +6,15 @@ The `create` and `destroy` playbooks are provided by the docker driver.
 They are [here](https://github.com/ansible-community/molecule-plugins/tree/main/src/molecule_plugins/docker/playbooks)
 
 
-## Docker Bug
+
+## Support
+
+### K3s Error - /var/lib/rancher should be ext4
 
 The installation runs without problem. We can connect to the API
 but there is no node.
 
-We got network problem.
+Why? We got a file system problem
 ```bash
 journalctl -u k3s -f
 ```
