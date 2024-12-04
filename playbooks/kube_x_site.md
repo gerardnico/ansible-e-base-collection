@@ -1,38 +1,61 @@
+## Kube X Site
+
+## About
+
+Provision a cluster.
 
 ## Steps
 
 ### Run the playbook
 
+With the [kube_x_inventory.yml](../extensions/kube_x/kube_x_inventory.yml)
 ```bash
-ansible-playbook playbooks/kube-x.yml -i ../extensions/kube_x/kube-x-inventory.yml
+ansible-playbook playbooks/kube_x_site.yml -i ../extensions/kube_x/kube_x_inventory.yml
 ```
 
-### Kubeconfig
+### Conf
+#### Kubeconfig
 
-The kubeconfig is then available at: `~/.kube/config.new` (by default `kubeconfig` var)
+The kubeconfig is then available at:
+* on local: `~/.kube/config.new` (by default `kubeconfig` var)
+* on server: `/etc/rancher/k3s/k3s.yaml`
 
-On server: `/etc/rancher/k3s/k3s.yaml`
-
-
-Reference:
+Reference on the creation of `~/.kube/config.new`:
 * [README kubeconfig](https://github.com/k3s-io/k3s-ansible?tab=readme-ov-file#kubeconfig)
 * [Play kubeconfig Var Ref](https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/defaults/main.yml#L5C13-L5C31)
 * [Play Copy Tasks Ref](https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145)
 
-Update the config
+#### Token
+
+Token (generated or not) on the server is located at: `/var/lib/rancher/k3s/server/token`
+
+## Installation Check
+
+### Connection and Nodes
+
+After a `molecule converge`, this should work on the docker host:
 ```bash
 export KUBECONFIG=~/.kube/config.new
-KUBE_CONTEXT=k3s-ansible
-kubectl config use-context $KUBE_CONTEXT
-kubectl config set-cluster $KUBE_CONTEXT --server=https://localhost:6443
-kubectl cluster-info
+kubectl config use-context k3s-ansible
+# if on localhost
+kubectl config set-cluster k3s-ansible --server=https://localhost:6443
+kubectl cluster-info # we should connect to the API
+kubectl get nodes # we should see a node
+```
+```
+NAME               STATUS   ROLES                  AGE     VERSION
+kube.example.com   Ready    control-plane,master   8m24s   v1.31.2+k3s1
 ```
 
-### Installation Check
+
+
+### Config Check
 
 ```bash
 k3s check-config
 ```
+
+### Journal Ctl Check
 
 ```bash
 journalctl -u k3s
@@ -46,8 +69,4 @@ journalctl -u k3s -n 100
 Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=info msg="Kube API server is now running"
 Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=info msg="ETCD server is now running"
 Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=info msg="k3s is up and running"
-```
-
-```bash
-level=info msg="Waiting for control-plane node kube.example.com startup: nodes \"kube.example.com\" not found"
 ```

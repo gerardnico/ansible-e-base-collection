@@ -8,6 +8,8 @@
       vars:
         ans_x_os_hostname: '{{ kube_x_os_hostname | default() }}'
         ans_x_os_packages: '{{ kube_x_os_packages | default([]) }}'
+        ans_x_os_admin_username: '{{ kube_x_admin_username | default() }}'
+        ans_x_admin_public_key: '{{ kube_x_admin_public_key | default() }}'
 
     - name: Installing Helm
       ansible.builtin.include_role:

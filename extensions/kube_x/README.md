@@ -38,18 +38,7 @@ molecule destroy -s docker
 
 ## Test/Verify
 
-After a `molecule converge`, this should work on the docker host:
-```bash
-KUBECONFIG=~/.kube/config.new kubectl config use-context k3s-ansible
-KUBECONFIG=~/.kube/config.new kubectl config set-cluster k3s-ansible --server=https://localhost:6443
-KUBECONFIG=~/.kube/config.new kubectl cluster-info
-KUBECONFIG=~/.kube/config.new kubectl get nodes # we should see a node
-```
-```
-NAME               STATUS   ROLES                  AGE     VERSION
-kube.example.com   Ready    control-plane,master   8m24s   v1.31.2+k3s1
-```
-
+Check [](../../playbooks/kube_x_site.md#installation-check)
 
 
 
