@@ -8,23 +8,42 @@ This role install:
 
 This is needed if you use Ansible to deploy `Helm` as the command is run on the target.
 
+## vars
+
+* `ans_x_helm_version`: the [helm release version](https://github.com/helm/helm/releases)
+* `ans_x_helm_plugins`: a list of plugin with properties of [helm_plugin_module](https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_plugin_module.html) 
+  * Only `plugin_path`, `plugin_version` and `state`
+
+
+
+
 ## Example
 
-* The `ans_x_helm_version`: https://github.com/helm/helm/releases . Example: `3.15.2`
-* Facts should be gathered in the playbook
 ```yaml
 - name: Play
   hosts: all
   roles:
     - role: ans_x_helm
       vars:
-        ans_x_helm_version: 3.15.2
+        ans_x_helm_version: 3.16.3
+        ans_x_helm_plugins:
+          - plugin_path: https://github.com/databus23/helm-diff
+            plugin_version: 3.9.12
+            state: present
 ```
 
-## Prerequisites
+## Helm-diff plugin
 
-The `yaml` python module for the [Helm Diff Plugin](https://github.com/databus23/helm-diff)
+To avoid the below warning, you should install [helm-diff](https://github.com/databus23/helm-diff)
+```
+# [WARNING]: The default idempotency check can fail to report changes in certain
+# cases. Install helm diff >= 3.4.1 for better results.
+```
 
+The `yaml` python module is mandatory.
+
+With `ans_x_os_packages`
 ```bash
-apt install -y python3-apt
+ans_x_os_packages:
+  - python3-apt
 ```

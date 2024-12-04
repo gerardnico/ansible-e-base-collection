@@ -47,12 +47,10 @@
       args:
         chdir: /tmp/helm
 
-# https://github.com/databus23/helm-diff
-# Required to see the changes
-# by Ansible Kubernetes
-# [WARNING]: The default idempotency check can fail to report changes in certain
-# cases. Install helm diff >= 3.4.1 for better results.
-- name: Install Helm Diff plugin
+
+- name: Install Helm Plugins
   kubernetes.core.helm_plugin:
-    plugin_path: https://github.com/databus23/helm-diff
-    state: present
+    plugin_path: '{{ item.plugin_path }}'
+    plugin_version: "{{ item.plugin_version | default() }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: '{{ ans_x_helm_plugins | default([]) }}'

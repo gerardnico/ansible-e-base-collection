@@ -1,6 +1,6 @@
 
-
 - name: Package - Add the EPEL repository
+  when: 'ans_x_os_packages_epel_repo_enabled is true'
   yum_repository:
     name: epel
     description: EPEL YUM repo
@@ -9,19 +9,20 @@
     priority: 100 # the default is 99, less priority than other repo
 
 - name: "Package - Adds the gpg key from the EPEL repo"
+  when: 'ans_x_os_packages_epel_repo_enabled is true'
   rpm_key:
     state: present
-    key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
-
-- name: "Package - Install Utility Packages"
-  yum:
-    name: {{ ans_x_os_packages }}
-    enablerepo: epel
-    state: present
-
+    key: "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
 
 - name: "Os - Yum Upgrade all packages"
   ansible.builtin.yum:
     name: '*'
     state: latest
     enablerepo: epel
+
+- name: "Package - Install Utility Packages"
+  yum:
+    name: "{{ ans_x_os_packages }}"
+    enablerepo: epel
+    state: present
+

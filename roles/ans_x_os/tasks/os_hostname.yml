@@ -1,4 +1,11 @@
 
+# On docker, the /etc/file is locked
+# In test with molecule, we may use `molecule_driver_name == 'docker`
+# https://ansible.readthedocs.io/projects/molecule/configuration/#molecule.interpolation.Interpolator.interpolate
+- name: 'Check Hostname'
+  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_os_hostname'
+  fail:
+    msg: "On this docker container, the hostname is ({{ ansible_fqdn }}). It should be set to ({{ ans_x_os_hostname }}) via the `hostname` flag"
 
 
 - name: 'Modify hostname'
@@ -6,15 +13,8 @@
   hostname:
     name: '{{ ans_x_os_hostname }}'
 
-# On docker, the /etc/file is locked
-# In test with molecule, we may use `molecule_driver_name == 'docker`
-# https://ansible.readthedocs.io/projects/molecule/configuration/#molecule.interpolation.Interpolator.interpolate
-#- name: 'Check Hostname'
-#  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_os_hostname'
-#  fail:
-#    msg: "On a docker container, the hostname is ({{ ansible_fqdn }}). It should be set to ({{ ans_x_os_hostname }}) via the `hostname` flag"
 
-- name: Configure the IP Name
+- name: Configure the IP_Name
   # On docker when we test with Molecule,
   # the /etc/hosts file is blocked. We get this error, and we can;t modify it
   # The error was: OSError: [Errno 16] Device or resource busy: b'/etc/.ansible_tmpw88krd6thosts' -> b'/etc/hosts'
@@ -25,9 +25,10 @@
   blockinfile:
     path: /etc/hosts
     block: |
-      {{ item.ip }} {{ item.name }}
+      {{ item.ip }} {{ item.fqdn }} {{ item.name }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK Hostname"
   with_items:
-    - { name: "{{ ans_x_os_hostname }}  {{ ans_x_os_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
+    # name: foo.example.com  NAME
+    - { fqdn: "{{ ans_x_os_hostname }}", name: "{{ ans_x_os_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
 
 

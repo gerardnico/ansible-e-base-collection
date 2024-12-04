@@ -30,7 +30,7 @@
   fail:
     msg: "The `ans_x_os_hostname` variable should be set."
 
-- name: Hostname
+- name: Configure the FQDN Hostname
   become: true
   import_tasks: 'os_hostname.yml'
   tags: network
@@ -42,6 +42,6 @@
 #  tags: os-cgroups
 
 - name: Selinux
-  when: "'libselinux' in ansible_facts.packages"
+  when: "'libselinux' in ansible_facts.packages and ans_x_selinux_disabled is true"
   include_tasks: 'os_selinux.yml'
   tags: os-selinux

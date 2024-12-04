@@ -60,13 +60,13 @@ provisioner:
     group_vars:
       k3s_cluster:
         ansible_user: root # mandatory
-        ans_x_admin_username: admin
-        ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
-        ans_x_k3s_token: jbHWvxxxx
-        ans_x_k3s_version: v1.31.2+k3s1
+        kube_x_admin_username: admin
+        kube_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
+        kube_x_k3s_token: jbHWvxxxx
+        kube_x_k3s_version: v1.31.2+k3s1
     host_vars:
       # setting for the docker/platform instance named 'molecule-debian'
       ${DOCK_X_CONTAINER}:
-        ans_x_os_hostname: '${ANS_X_OS_HOSTNAME}'
+        kube_x_os_hostname: '${ANS_X_OS_HOSTNAME}'
 #  playbooks:
 #    converge: ../playbooks/converge.yml

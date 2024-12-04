@@ -5,15 +5,23 @@
     - name: Executing Os Role
       ansible.builtin.include_role:
         name: ans_x.ans_x_collection.ans_x_os
+      vars:
+        ans_x_os_hostname: '{{ kube_x_os_hostname | default() }}'
+        ans_x_os_packages: '{{ kube_x_os_packages | default([]) }}'
 
     - name: Installing Helm
       ansible.builtin.include_role:
         name: ans_x.ans_x_collection.ans_x_helm
+      vars:
+        ans_x_helm_version: "{{ kube_x_helm_version | default('3.16.3') }}"
+        ans_x_helm_plugins: '{{ kube_x_helm_plugins | default([]) }}'
 
     - name: Installing Longhorn Os Package
-      when: 'ans_x_longhorn_version is defined and ans_x_longhorn_version is defined != ""'
+      when: 'kube_x_longhorn_version is defined and kube_x_longhorn_version != ""'
       ansible.builtin.include_role:
         name: ans_x.ans_x_collection.ans_x_longhorn
+      vars:
+        ans_x_longhorn_version: '{{ kube_x_longhorn_version }}'
 
 
 # ansible.builtin.import_playbook: Works only as play
@@ -23,10 +31,10 @@
 - name: Install Kube X
   ansible.builtin.import_playbook: k3s.orchestration.site.yml
   vars:
-    token: '{{ ans_x_k3s_token }}'
-    k3s_version: '{{ ans_x_k3s_version }}'
+    token: '{{ kube_x_k3s_token }}'
+    k3s_version: '{{ kube_x_k3s_version }}'
     api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
-    extra_server_args: '{{ (ans_x_k3s_extra_server_args | default([])) + ["--disable=traefik"] }}'
+    extra_server_args: '{{ (kube_x_k3s_extra_server_args | default([])) + ["--disable=traefik"] }}'
 
 # Controle Node
 # https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145

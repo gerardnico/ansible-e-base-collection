@@ -1,3 +1,6 @@
 # helm version
 # https://github.com/helm/helm/releases
-ans_x_helm_version: 3.15.2
+ans_x_helm_version: 3.16.3
+
+# Nothing
+ans_x_helm_plugins:

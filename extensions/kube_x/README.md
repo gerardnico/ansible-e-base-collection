@@ -1,19 +1,27 @@
 # Molecule Testing for Kube-X
 
 
-## Results: Scenario
+## About
 
-* The [docker scenario](molecule/default/README.md) run successfully
-* The vagrant does not work because we work with docker, and it does not found any vagrant.
+This is the project directory of a molecule [docker scenario](molecule/default/README.md).
 
+This is the molecule project directory for the `kube_x` playbooks.
+* [](../../playbooks/kube_x_site.yml)
+
+Note: Normally the project directory is the `role` but in our playbook case. There is no role.
 
 ## Run
 
-* Go to the project dir
+* Go to this project directory
 ```bash
 cd extensions/kube_x
 ```
-* Create the docker kube network if not present
+
+> [WARNING]
+> Molecule can not be run from the collection project directory.
+> Otherwise, it will reinstall the collection and messed up practically everything.
+
+* Create the docker kube network if not present (don't know why, but then we get a `nslookup hostname` working)
 ```bash
 docker network create kube
 ```
@@ -30,7 +38,7 @@ molecule destroy -s docker
 
 ## Test/Verify
 
-After a `molecule converge`, this should work:
+After a `molecule converge`, this should work on the docker host:
 ```bash
 KUBECONFIG=~/.kube/config.new kubectl config use-context k3s-ansible
 KUBECONFIG=~/.kube/config.new kubectl config set-cluster k3s-ansible --server=https://localhost:6443
@@ -42,14 +50,9 @@ NAME               STATUS   ROLES                  AGE     VERSION
 kube.example.com   Ready    control-plane,master   8m24s   v1.31.2+k3s1
 ```
 
-## Molecule Project directory
 
-This is the molecule project directory for the `kube_x` playbooks.
-* [](../../playbooks/kube_x_site.yml)
 
-Normally this is the `role` but in our case. There is no role.
 
-> [WARNING] 
-> Molecule can not be run from the collection project directory.
-> Otherwise, it will reinstall the collection and messed up practically everything.
+
+
 
