@@ -22,6 +22,7 @@ platforms:
   - name: '${DOCK_X_CONTAINER}'
     image: '${DOCK_X_REGISTRY}/${DOCK_X_NAMESPACE}/${DOCK_X_NAME}:${DOCK_X_TAG}'
     hostname: '${ANS_X_OS_HOSTNAME}'
+    # or ${DOCK_X_CONTAINER}.docker.localhost
     pre_build_image: true
     override_command: false
     privileged: true
