@@ -2,9 +2,33 @@
 
 ## About
 
-Provision a cluster.
+Provision a cluster 
 
 ## Steps
+
+### Conf
+
+#### Version
+
+The `k3s_version` is the [version of k3](https://github.com/k3s-io/k3s/releases)
+
+Example:
+* The K3s release `v1.18.6+k3s1` maps to the `v1.18.6` Kubernetes release.
+* The K3s release `v1.18.6+k3s2` maps to the `v1.18.6` Kubernetes release but with a fix
+
+[Ref](https://github.com/k3s-io/k3s?tab=readme-ov-file#release-cadence)
+
+
+#### Token
+
+The `token` is used to encrypt the data (ie you change the token, the service error will be `bootstrap data already found and encrypted with different token`)
+
+The token should be a random string of reasonable length.
+
+Example: Generation
+```bash
+openssl rand -base64 64 | tr -d '\n'
+```
 
 ### Run the playbook
 
@@ -13,7 +37,7 @@ With the [kube_x_inventory.yml](../extensions/kube_x/kube_x_inventory.yml)
 ansible-playbook playbooks/kube_x_site.yml -i ../extensions/kube_x/kube_x_inventory.yml
 ```
 
-### Conf
+### After
 #### Kubeconfig
 
 The kubeconfig is then available at:
@@ -28,6 +52,8 @@ Reference on the creation of `~/.kube/config.new`:
 #### Token
 
 Token (generated or not) on the server is located at: `/var/lib/rancher/k3s/server/token`
+
+
 
 ## Installation Check
 
@@ -70,3 +96,7 @@ Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=in
 Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=info msg="ETCD server is now running"
 Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=info msg="k3s is up and running"
 ```
+
+
+## Dependency
+* https://github.com/k3s-io/k3s-ansible
