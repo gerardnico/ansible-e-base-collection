@@ -4,7 +4,7 @@
 
     - name: Executing Os Role
       ansible.builtin.include_role:
-        name: ans_x.ans_x_collection.ans_x_os
+        name: ans_x.ans_x_base.ans_x_os
       vars:
         ans_x_os_hostname: '{{ kube_x_os_hostname | default() }}'
         ans_x_os_packages: '{{ kube_x_os_packages | default([]) }}'
@@ -13,7 +13,7 @@
 
     - name: Installing Helm
       ansible.builtin.include_role:
-        name: ans_x.ans_x_collection.ans_x_helm
+        name: ans_x.ans_x_base.ans_x_helm
       vars:
         ans_x_helm_version: "{{ kube_x_helm_version | default('3.16.3') }}"
         ans_x_helm_plugins: '{{ kube_x_helm_plugins | default([]) }}'
@@ -21,7 +21,7 @@
     - name: Installing Longhorn Os Package
       when: 'kube_x_longhorn_version is defined and kube_x_longhorn_version != ""'
       ansible.builtin.include_role:
-        name: ans_x.ans_x_collection.ans_x_longhorn
+        name: ans_x.ans_x_base.ans_x_longhorn
       vars:
         ans_x_longhorn_version: '{{ kube_x_longhorn_version }}'
 

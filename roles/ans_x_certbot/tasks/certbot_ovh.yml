@@ -1,0 +1,23 @@
+# Key from https://eu.api.ovh.com/createToken/
+# with the following permissions and only for the server 164.132.99.202
+# GET /domain/zone/*
+# PUT /domain/zone/*
+# POST /domain/zone/*
+# DELETE /domain/zone/*
+- name: Copy Ovh Key (To manipulate DNS record)
+  template:
+    src: dns_provider/ovh.ini
+    dest: "/root/.secrets/certbot/ovh.ini"
+    backup: yes
+    mode: 600
+
+
+
+# Create one certificate with the name of the first domain
+# that's why bytle.net is the first one
+- name: Get the Ovh certificate
+  with_items: "{{ans_x_certbot_ovh_domains}}"
+  include_tasks: certbot_certonly_ovh.yml
+  vars:
+    letsencrypt_domain: '{{ item }}'
+  tags: certbot-ovh

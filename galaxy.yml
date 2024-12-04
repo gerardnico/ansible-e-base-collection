@@ -6,7 +6,7 @@ namespace: ans_x
 
 # The name of the collection. Has the same character restrictions as 'namespace'
 # The name is the project name seen in `git-x exec`, `collection` was not self-explanatory, `default` also not
-# so ans_x_collection
+# so ans_x_base
 name: ans_x_base
 
 # The version of the collection. Must be compatible with semantic versioning

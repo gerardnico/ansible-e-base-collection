@@ -1,0 +1,15 @@
+
+
+########################
+# For consistency
+# Should not be changed
+########################
+
+ans_x_certbot_letsencrypt_home_dir: /root/certbot
+ans_x_certbot_letsencrypt_renewal_script: "{{ ans_x_certbot_letsencrypt_home_dir }}/renewal.sh"
+
+# Where the certificate are stored
+# Each certificate are stored in the subdirectory
+# example for the domain yolo.voila.net
+# the certificate are located at /etc/letsencrypt/live/yolo.voila.net
+ans_x_certbot_letsencrypt_cert_base_dir: /etc/letsencrypt/live

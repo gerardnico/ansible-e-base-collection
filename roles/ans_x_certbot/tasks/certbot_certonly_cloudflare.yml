@@ -1,0 +1,18 @@
+# To loop on multiple items, with ansible you do it with an include
+
+- name: Stat the directory (/etc/letsencrypt/live/{{ letsencrypt_dir }})
+  stat:
+    path: '/etc/letsencrypt/live/{{ letsencrypt_dir }}'
+  register: domain_dir
+
+- name: Get the certificate for {{ letsencrypt_domain }}
+  when: not domain_dir.stat.exists
+  shell: |
+    certbot certonly \
+      --dns-cloudflare \
+      --dns-cloudflare-credentials ~/.secrets/certbot/cloudflare.ini \
+      --dns-cloudflare-propagation-seconds 60 \
+      -n \
+      --agree-tos \
+      -m {{ ans_x_certbot_letsencrypt_email }} \
+      -d {{ letsencrypt_domain }}

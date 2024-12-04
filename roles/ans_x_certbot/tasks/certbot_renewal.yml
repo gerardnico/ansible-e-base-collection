@@ -1,0 +1,54 @@
+
+
+# create the home dir
+- file:
+    path: "{{ ans_x_certbot_letsencrypt_home_dir }}"
+    state: directory
+    mode: 0744
+
+# Renewal bash file creation
+- name: Delete renewal bash file
+  file:
+    path: "{{ ans_x_certbot_letsencrypt_renewal_script }}"
+    state: absent
+
+- name: Create renewal bash file
+  file:
+    path: "{{ ans_x_certbot_letsencrypt_renewal_script }}"
+    state: touch
+    mode: 0744
+
+# Ovh
+- name: Add Ovh letsencrypt renewal in the script
+  when:
+  lineinfile:
+    path: "{{ ans_x_certbot_letsencrypt_renewal_script }}"
+    line: echo ------------------- && echo Cert Only for the domain {{ item }} && letsencrypt certonly --dns-ovh --dns-ovh-credentials /root/.secrets/certbot/ovh.ini --dns-ovh-propagation-seconds 60 -n --agree-tos -m {{ ans_x_certbot_letsencrypt_email }} -d {{ item }}
+  with_items: "{{ans_x_certbot_ovh_domains}}"
+
+# Cloudflare
+- name: Add Cloudflare letsencrypt renewal in the script
+  when: 'ans_x_certbot_cloudflare_api_key is defined'
+  lineinfile:
+    path: "{{ ans_x_certbot_letsencrypt_renewal_script }}"
+    line: echo ------------------- && echo Cert Only for the domain {{ item.value.fqdn }} && letsencrypt certonly --dns-cloudflare --dns-cloudflare-credentials /root/.secrets/certbot/cloudflare.ini --dns-cloudflare-propagation-seconds 60 -n --agree-tos -m {{ ans_x_certbot_letsencrypt_email }} -d {{ item.value.fqdn }}
+  with_dict: "{{ans_x_certbot_cloudflare_domains}}"
+
+- name: Add the nginx reload
+  lineinfile:
+    path: "{{ ans_x_certbot_letsencrypt_renewal_script }}"
+    line: echo ------------------- && echo Reload Nginx && systemctl reload nginx
+
+- name: Add the cron check (healthchecks.io)
+  lineinfile:
+    path: "{{ ans_x_certbot_letsencrypt_renewal_script }}"
+    line: "echo ------------------- && echo Ping HealthCheck && curl -fsS -m 10 --retry 5 -o /dev/null {{ ans_x_certbot_renewal_ping_url }}"
+
+# certificate are available for three month
+- name: Add letsencrypt cronjob for cert renewal (Every sunday at 17:51)
+  cron:
+    name: 'letsencrypt_renewal'
+    weekday : '6'
+    hour: '17'
+    minute: '51'
+    job: "{{ ans_x_certbot_letsencrypt_renewal_script }}"

@@ -1,0 +1,49 @@
+
+
+- name: 'Check Package Manager'
+  when: "ansible_facts['pkg_mgr'] not in [ 'yum' ]"
+  fail:
+    msg: "The package manager {{ ansible_facts['pkg_mgr'] }} is not supported (only yum for now)"
+
+- name: EPEL
+  block:
+    - naame: 'Package - Add the EPEL repository'
+      yum_repository:
+        name: epel
+        description: EPEL YUM repo
+        baseurl: https://dl.fedoraproject.org/pub/epel/$releasever/$basearch/
+        gpgcheck: yes
+    - name: "Package - Adds the gpg key from the EPEL repo"
+      rpm_key:
+        state: present
+        key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+
+# https://certbot-dns-ovh.readthedocs.io/en/stable/
+- name: Install Certbot and the dns plugins
+  yum:
+    name:
+      - certbot
+      - python2-certbot-dns-ovh
+      - python2-certbot-dns-cloudflare
+    state: present
+    enablerepo: epel
+
+- name: Create secret directory
+  file:
+    state: directory
+    path: "/root/.secrets/certbot"
+
+- name: Certbot - Cloudflare
+  when: ans_x_certbot_cloudflare_api_key is defined
+  import_tasks: certbot_cloudflare.yml
+  tags: certbot-cloudflare
+
+- name: Certbot - Ovh
+  when: ans_x_certbot_ovh_api_key is defined
+  import_tasks: certbot_ovh.yml
+  tags: certbot-ovh
+
+
+- name: Certbot - Cert Renewal
+  import_tasks: certbot_renewal.yml
+  tags: certbot-renewal

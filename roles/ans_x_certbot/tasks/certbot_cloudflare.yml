@@ -1,0 +1,23 @@
+
+# Global key: https://dash.cloudflare.com/profile/api-tokens
+# as this is the only one supported
+# https://certbot-dns-cloudflare.readthedocs.io/en/stable/#credentials
+# We can now use a cloudflare API token, but we need version 2.3.1
+# as of now, it's version 1.11
+# ```
+# yum info python2-certbot-dns-cloudflare
+# ```
+- name: Copy Cloudflare Key (To manipulate DNS record)
+  template:
+    src: dns_provider/cloudflare.ini
+    dest: "/root/.secrets/certbot/cloudflare.ini"
+    backup: yes
+    mode: 600
+
+- name: Get the Cloudflare certificate {{ item.key }}
+  with_dict: "{{ans_x_certbot_cloudflare_domains}}"
+  include_tasks: certbot_certonly_cloudflare.yml
+  vars:
+    letsencrypt_domain: '{{ item.value.fqdn }}'
+    letsencrypt_dir: '{{ item.value.dir }}'
+  tags: certbot-cloudflare
