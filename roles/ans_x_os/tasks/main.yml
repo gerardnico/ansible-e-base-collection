@@ -15,6 +15,7 @@
   fail:
     msg: "The package manager {{ ansible_facts['pkg_mgr'] }} is not supported (only apt or yum)"
 
+
 - name: Os Package
   ansible.builtin.include_tasks: "os_package_{{ ansible_facts['pkg_mgr'] }}.yml"
   tags: os-package
