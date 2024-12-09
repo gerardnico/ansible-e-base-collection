@@ -72,6 +72,11 @@ kubectl get nodes # we should see a node
 NAME               STATUS   ROLES                  AGE     VERSION
 kube.example.com   Ready    control-plane,master   8m24s   v1.31.2+k3s1
 ```
+```bash
+# no traefik
+helm list -n kube-system
+```
+
 
 
 
