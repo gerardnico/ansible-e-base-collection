@@ -21,7 +21,7 @@
   tags: os-package
 
 - name: Admin User
-  when: ans_x_os_admin_username is defined
+  when: 'ans_x_os_admin_username is defined and ans_x_os_admin_username != ""'
   become: true
   import_tasks: 'os_admin_user.yml'
   tags: user

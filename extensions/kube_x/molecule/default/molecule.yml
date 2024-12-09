@@ -9,16 +9,8 @@ driver:
 # Instance to create (manage the type of distribution CentOS, Fedora, Debian)
 # https://ansible.readthedocs.io/projects/molecule/configuration/#platforms
 platforms:
-  # These properties are literally read by tasks in `create.yml`
-  # It's a property of community docker
-  # * name is the name of the container
-  # * image ...
-  # You could have more than one image started
-  # The command is hard written as `sleep 1d`
-  #
-  # There is also a docker driver which is completely other thing
+  # These properties are literally read by tasks in the `create.yml` of the docker driver
   # https://github.com/ansible-community/molecule-plugins/tree/main/src/molecule_plugins/docker
-  #
   - name: '${DOCK_X_CONTAINER}'
     image: '${DOCK_X_REGISTRY}/${DOCK_X_NAMESPACE}/${DOCK_X_NAME}:${DOCK_X_TAG}'
     hostname: '${ANS_X_OS_HOSTNAME}'
