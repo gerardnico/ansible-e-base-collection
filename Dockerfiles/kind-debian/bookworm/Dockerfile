@@ -18,5 +18,10 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt -y install python3-yaml
 
 
-# (nslookup, dig )
-RUN apt-get install -y dnsutils iputils-ping
+# (nslookup, netstat )
+RUN echo "# nslookup" \
+    && apt-get install -y dnsutils \
+    && echo "# ip tools" \
+    && apt-get install -y iputils-ping \
+    && echo "# netstat" \
+    && apt-get install -y net-tools
