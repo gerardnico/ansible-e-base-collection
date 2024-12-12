@@ -1,0 +1,51 @@
+
+
+#########################################
+# Variables to set to customize the deployment
+#########################################
+
+# The dashboard uri (for instance traefik.i.example.com)
+# for now by default, the first server in the inventory
+ans_x_k3s_traefik_dashboard_hostname: "{{ hostvars[groups[server_group][0]]['hostname'] | default(groups[server_group][0]) }}"
+
+# List of users
+# htpasswd -nb username password
+# example:
+# `htpasswd -nb admin@traefik welcome`
+# This is the default, it should be changed and the password part should be encrypted by ansible vault
+ans_x_k3s_traefik_dashboard_basic_auth_users:
+  - admin@traefik:$apr1$9qTj0zBl$ZmA009UNx3RMOBxALIKLB1
+
+# Traefik Helm Values
+# ie: https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+ans_x_k3s_traefik_helm_values: ''
+
+# The network that can access all
+# kube-system
+ans_x_k3s_traefik_private_kube_admin_network:
+  - 143.176.206.82/32
+
+#########################################
+# Standard Default variables
+# These variables does not need to be modified if the default value has not changed
+#########################################
+
+# The group name for the server in the inventory
+server_group: servers
+# the default k3s namespace
+ans_x_k3s_traefik_namespace: 'kube-system'
+
+
+# the location of the kubeconfig
+kubeconfig: '/home/{{ ansible_user }}/.kube/config'
+
+################################################
+## Internal variables to keep name consistent in the playbook
+##############################################
+# The middleware auth name
+ans_x_k3s_traefik_middleware_auth_name: traefik-dashboard-auth
+# The secret name of the basic auth authentication
+ans_x_k3s_traefik_basic_auth_secret_name: traefik-dashboard-basic-auth-users
+
+# The secret name should be consistent between the ingress route and the cert
+ans_x_k3s_traefik_dashboard_cert_secret_name: traefik-dashboard-cert-secret

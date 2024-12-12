@@ -1,0 +1,8 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    {{ ans_x_k3s_traefik_helm_values | to_yaml | indent(4)}}

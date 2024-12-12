@@ -1,0 +1,48 @@
+# Ansible playbook to configure traefik
+
+- name: Add Ingress
+  kubernetes.core.k8s:
+    state: present
+    #force: true # replaced, not patched
+    #    validate:
+    #      fail_on_error: no
+    #      strict: yes
+    kubeconfig: '{{ kubeconfig  }}'
+    template: traefik-dashboard-ingress.yml
+
+# Set a variable that is the output of a shell command in bash
+- name: Get the GitHub Hooks CIDR in a fact
+  ansible.builtin.shell:
+    # We filter out the IPv6 CIDRs because there is a bug in the split of python in the next line that adds new lines
+    cmd: |
+      curl -s https://api.github.com/meta | jq --raw-output '.hooks | join("\n")' | grep -v '::/'
+  args:
+    executable: /bin/bash
+  register: github_hooks_cidr
+
+- name: Echo the GitHub CIDR lists
+  debug:
+    msg: '{{ github_hooks_cidr.stdout }}'
+
+- name: Set a fact for the GitHub Hooks CIDR
+  set_fact:
+    github_hooks_cidr: "{{ github_hooks_cidr.stdout.split('\n') + ans_x_k3s_traefik_private_kube_admin_network }}"
+
+- name: Echo the GitHub CIDR lists
+  debug:
+    msg: '{{ github_hooks_cidr | to_yaml }}'
+
+#- name: Echo template file content
+#  debug:
+#    msg: "{{ lookup('template', 'middleware-allow-github-ip-hooks.yml') }}"
+
+- name: Create a Traefik middleware that accepts only the GitHub Hooks CIDR with Kubernetes
+  kubernetes.core.k8s:
+    state: present
+    template: middleware-allow-github-ip-hooks.yml
+
+- name: Create the service monitor
+  kubernetes.core.k8s:
+    state: present
+    template: traefik-service-monitor.yml
+

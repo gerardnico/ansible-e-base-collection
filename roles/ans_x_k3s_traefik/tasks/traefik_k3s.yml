@@ -1,0 +1,8 @@
+
+# As stated here
+# https://docs.k3s.io/helm#customizing-packaged-components-with-helmchartconfig
+- name: Helm Traefik Configuration
+  template:
+    src: traefik-k3s-config.yaml
+    dest: /var/lib/rancher/k3s/server/manifests/traefik-config.yaml
+

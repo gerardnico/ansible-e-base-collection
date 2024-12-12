@@ -1,0 +1,10 @@
+
+
+
+- name: Traefik - k3s helm
+  import_tasks: traefik_k3s.yml
+  tags: traefik-k3s
+
+- name: Traefik - Conf
+  import_tasks: traefik_conf.yml
+  tags: traefik-conf

@@ -1,0 +1,100 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: '{{ ans_x_k3s_traefik_basic_auth_secret_name }}'
+  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+# The values for all keys in the data field have to be base64-encoded strings.
+# If the conversion to base64 string is not desirable, you can choose to specify the stringData field instead,
+# which accepts arbitrary strings as values.
+data:
+  # one user by line
+  users: |
+    {{ ans_x_k3s_traefik_dashboard_basic_auth_users | map('b64encode') | join('    \n')}}
+---
+# Forward authentication to example.com
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: '{{ ans_x_k3s_traefik_middleware_auth_name }}'
+  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+spec:
+  basicAuth:
+    secret: '{{ ans_x_k3s_traefik_basic_auth_secret_name }}'
+---
+# The certificate
+# (Because we use IngressRoute, it needs to be created manually)
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: traefik-dashboard-cert
+  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+  labels:
+    # use cloudflare Dns
+    "issuer-challenge": "dns01-cloudflare"
+spec:
+  commonName: '{{ ans_x_k3s_traefik_dashboard_hostname }}'
+  secretName: '{{ ans_x_k3s_traefik_dashboard_cert_secret_name }}'
+  dnsNames:
+    - '{{ ans_x_k3s_traefik_dashboard_hostname }}'
+  issuerRef:
+    kind: ClusterIssuer
+    name: '{{ kube_cert_manager_issuer_name }}'
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-http-to-https
+  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+spec:
+  redirectScheme:
+    permanent: true
+    scheme: https
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-https
+  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+  labels:
+    app.kubernetes.io/name: traefik
+spec:
+  entryPoints:
+    - websecure
+  # cert-manager automatically creates a new Certificate resource
+  # for the specified domain with the given secretName
+  tls:
+    # the secret name used to store the certificate
+    secretName: '{{ ans_x_k3s_traefik_dashboard_cert_secret_name }}'
+  routes:
+    - kind: Rule
+      # Host rule as advised in the doc, and it's much easier to get to the dashboard from the root (no trailing slash after dashboard)
+      match: Host(`{{ ans_x_k3s_traefik_dashboard_hostname }}`)
+      services:
+        # dashboard and api are in the same pod
+        - kind: TraefikService
+          name: api@internal
+      middlewares:
+        - name: traefik-dashboard-http-to-https
+        - name: '{{ ans_x_k3s_traefik_middleware_auth_name }}'
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-http
+  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+  labels:
+    app.kubernetes.io/name: traefik
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      # Host rule as advised in the doc, and it's much easier to get to the dashboard from the root (no trailing slash after dashboard)
+      match: Host(`{{ ans_x_k3s_traefik_dashboard_hostname }}`)
+      services:
+        # dashboard and api are in the same pod
+        - kind: TraefikService
+          name: api@internal
+      middlewares:
+        - name: traefik-dashboard-http-to-https
