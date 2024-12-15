@@ -39,8 +39,8 @@ platforms:
       - '${ANS_X_INVENTORY_GROUP_ALL}'
     volumes:
        # /var/lib/rancher has to be a local filesystem such as ext4 or XFS.
+       # https://docs.k3s.io/cli/server#data
        - /tmp/var/lib/rancher:/var/lib/rancher
-    #  - /sys/fs/cgroup/warewulf.scope:/sys/fs/cgroup:rw
 
 dependency:
   name: galaxy
