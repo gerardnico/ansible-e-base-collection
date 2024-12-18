@@ -1,0 +1,82 @@
+# Prometheus conf
+# https://prometheus.io/docs/operating/configuration
+
+# The global block Prometheus server's global configuration
+global:
+  # how often Prometheus will scrape targets
+  # The scrape interval is the biggest factor influencing data volumes:
+  # select it based on your observability needs.
+  # For example, changing from 30s (default value) to 1m can reduce data volumes by 50%.
+  # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  scrape_interval:     30s
+  evaluation_interval: 15s # how often Prometheus will evaluate rules
+  # scrape_timeout is set to the global default (10s).
+
+# The location of any rules we want the Prometheus server to load
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+# - "first.rules"
+# - "second.rules"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# The scrape jobs
+# The job name is added as a label with the name `job` ie `job=<job_name>`
+# to any timeseries scraped from this config.
+# metrics_path defaults to '/metrics'
+# scheme defaults to 'http'.
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+# Filtering, relabeling is done via the relabel_configs
+# It allows advanced modifications to any target and its labels before scraping.
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_action
+scrape_configs:
+  # Prometheus scrapes itself
+  - job_name: "prom"
+    scrape_interval: 1m
+    static_configs:
+      - targets: [ 'localhost:{{ ans_x_prometheus_port }}' ]
+  - job_name: "node_exporter"
+    static_configs:
+      - targets: [ 'localhost:{{ ans_x_prometheus_node_exporter_port }}' ]
+  - job_name: "smtp_inbox"
+    static_configs:
+      - targets: [ 'localhost:{{ inbox_http_port }}' ]
+  - job_name: "nginx"
+    metrics_path: '/prom/nginx/metrics'
+    static_configs:
+      - targets: [ 'localhost' ]
+  # https://learn.netdata.cloud/docs/exporting/prometheus#querying-metrics
+  # We don't need all this metrics.
+  #  - job_name: "netdata"
+  #    metrics_path: '/api/v1/allmetrics?format=prometheus&help=yes'
+  #    static_configs:
+  #      - targets: [ 'localhost:{{ netdata_default_port }}' ]
+
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
+# debug:
+# at https://beau.btyle.net/prom/prom/metrics
+# see:
+#  * prometheus_remote_storage_samples_total: total sent
+#  * prometheus_remote_storage_samples_dropped_total: total dropped
+remote_write:
+  - url: '{{ grafana_cloud_prometheus_url }}'
+    basic_auth:
+      username: '{{ grafana_cloud_prometheus_user }}'
+      password: '{{ grafana_cloud_prometheus_password }}'
+  - url: '{{ new_relic_prometheus_url }}'
+    bearer_token: '{{ new_relic_prometheus_bearer }}'
+    write_relabel_configs:
+      - source_labels: [ __name__ ]
+        # ie https://beau.bytle.net/prom/nginx/metrics
+        # The regexp can be: (jvm_.*|workload:.*)
+        regex: 'nginx_vts_server_requests.*'
+        action: keep
+       # by jobs
+#     - source_labels: [ job ]
+#       regex: 'cadvisor'
+#       action: keep

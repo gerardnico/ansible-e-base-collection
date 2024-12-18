@@ -1,0 +1,9 @@
+---
+
+# a single
+- name: 'restart prom'
+  include_tasks: handlers/prom_handlers.yml
+
+# multiple, as of version 2.8, you need to use include_tasks (not block or import_tasks)
+- name: 'restart prom-node-exporter'
+  include_tasks: handlers/node_exporter_handlers.yml

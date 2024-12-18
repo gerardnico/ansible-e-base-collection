@@ -1,0 +1,23 @@
+[Unit]
+Description=Prometheus Node Exporter
+Documentation=https://github.com/prometheus/node_exporter
+After=syslog.target
+After=network.target
+
+
+[Service]
+Type=simple
+User={{ ans_x_prometheus_user_name }}
+Group={{ ans_x_prometheus_user_group }}
+WorkingDirectory={{ ans_x_prometheus_node_exporter_home }}
+# You can enable collector that are disabled by default
+# See https://github.com/prometheus/node_exporter#disabled-by-default
+# Example:
+# ExecStart={{ ans_x_prometheus_node_exporter_home }}/node_exporter --collector.systemd –-collector.processes
+ExecStart={{ ans_x_prometheus_node_exporter_home }}/node_exporter
+Restart=always
+Environment=USER={{ ans_x_prometheus_user_name }} HOME={{ ans_x_prometheus_node_exporter_home }}
+
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,40 @@
+# doc
+# https://github.com/prometheus/node_exporter
+
+- name: Check if Prometheus node exporter is already installed.
+  stat:
+    path: "{{ ans_x_prometheus_node_exporter_home }}/node_exporter"
+  register: node_exporter_exe
+- name: Download
+  when: not node_exporter_exe.stat.exists
+  block:
+
+    - name: Download Node exporter
+      get_url:
+        url: "{{ ans_x_prometheus_node_exporter_binary_url }}"
+        dest: "{{ ans_x_prometheus_install_dir }}/node_exporter.tar.gz"
+        owner: "{{ ans_x_prometheus_user_name }}"
+        group: "{{ ans_x_prometheus_user_group }}"
+        checksum: "{{ ans_x_prometheus_node_exporter_checksum }}"
+
+    - name: Unzip Node exporter
+      unarchive:
+        src: "{{ ans_x_prometheus_install_dir }}/node_exporter.tar.gz"
+        dest: "{{ ans_x_prometheus_install_dir }}"
+        owner: "{{ ans_x_prometheus_user_name }}"
+        group: "{{ ans_x_prometheus_user_group }}"
+        #creates: "{{ gogs_home }}/gogs"
+        copy: false
+    - name: Copy files
+      notify: 'restart prom-node-exporter'
+      become: yes
+      become_user: "{{ ans_x_prometheus_user_name }}"
+      shell:
+        cmd: "/bin/cp -rf {{ ans_x_prometheus_install_dir }}/{{ ans_x_prometheus_node_exporter_name }}/* {{ ans_x_prometheus_node_exporter_home }}"
+
+- name: Copy the systemd node-exporter.service file
+  notify: 'restart prom-node-exporter'
+  template:
+    src: node-exporter.service
+    dest: /etc/systemd/system/node-exporter.service
+    mode: 0644

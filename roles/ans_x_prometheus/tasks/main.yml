@@ -1,0 +1,35 @@
+- name: Install
+  become: yes
+  block:
+    - name: "Create the group {{ ans_x_prometheus_user_group }}"
+      group:
+        name: '{{ ans_x_prometheus_user_group }}'
+        state: present
+    - name: "Create the user {{ ans_x_prometheus_user_name }}"
+      user:
+        name: '{{ ans_x_prometheus_user_name }}'
+        comment: User for the prometheus app
+        shell: /bin/bash
+        state: present
+        group: '{{ ans_x_prometheus_user_group }}'
+    - name: Create the home path {{ ans_x_prometheus_home }}
+      tags: prom-admin
+      file:
+        state: directory
+        path: '{{ ans_x_prometheus_home }}'
+        group: '{{ ans_x_prometheus_user_name }}'
+        owner: '{{ ans_x_prometheus_user_group }}'
+        mode: 'u=rwx,g=rwx,o='
+        recurse: true
+    - name: Create Prometheus Temporary Install dir
+      file:
+        path: "{{ ans_x_prometheus_install_dir }}"
+        state: directory
+        owner: "{{ ans_x_prometheus_user_name }}"
+        group: "{{ ans_x_prometheus_user_group }}"
+        mode: 'u=rwx,g=rx,o=rx'
+    - name: Install Prometheus
+      include_tasks: prometheus_install.yml
+    - name: Install Node exporter
+      tags: prom-node-exporter
+      include_tasks: prometheus_node_exporter.yml

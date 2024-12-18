@@ -1,0 +1,20 @@
+[Unit]
+Description=Prometheus
+After=syslog.target
+After=network.target
+
+
+[Service]
+Type=simple
+User={{ ans_x_prometheus_user_name }}
+Group={{ ans_x_prometheus_user_group }}
+WorkingDirectory={{ ans_x_prometheus_home }}
+ExecStart={{ ans_x_prometheus_home }}/prometheus \
+  --config.file={{ ans_x_prometheus_home }}/prometheus.yml \
+  --web.listen-address=:{{ ans_x_prometheus_port }}
+Restart=always
+Environment=USER={{ ans_x_prometheus_user_name }} HOME={{ ans_x_prometheus_home }}
+
+
+[Install]
+WantedBy=multi-user.target

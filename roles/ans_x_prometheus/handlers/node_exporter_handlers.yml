@@ -1,0 +1,18 @@
+
+- name: Restart and test
+  become: yes
+  block:
+    - name: 'node-exporter.service'
+      systemd:
+        name: 'node-exporter.service'
+        enabled: 'yes'
+        daemon_reload: yes
+        state: restarted
+    - name: Test that the service is up
+      uri:
+        url: 'http://localhost:{{ ans_x_prometheus_node_exporter_port }}/metrics'
+        method: GET
+      register: httpcall
+      until: httpcall.status == 200
+      delay: 5 # Every 5 seconds
+      retries: 5 # 5 * 5 seconds = 25

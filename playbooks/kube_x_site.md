@@ -105,3 +105,7 @@ Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=in
 
 ## Dependency
 * https://github.com/k3s-io/k3s-ansible
+
+## Test
+
+This playbook has a [molecule test](../extensions/kube_x/README.md)
