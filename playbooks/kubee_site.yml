@@ -1,4 +1,4 @@
-- name: Kube-x OS
+- name: Kubee OS
   hosts: k3s_cluster
   tasks:
 
@@ -6,24 +6,24 @@
       ansible.builtin.include_role:
         name: ans_x.ans_x_base.ans_x_os
       vars:
-        ans_x_os_hostname: '{{ kube_x_os_hostname | default() }}'
-        ans_x_os_packages: '{{ kube_x_os_packages | default([]) }}'
-        ans_x_os_admin_username: '{{ kube_x_admin_username | default() }}'
-        ans_x_admin_public_key: '{{ kube_x_admin_public_key | default() }}'
+        ans_x_os_hostname: '{{ kubee_os_hostname | default() }}'
+        ans_x_os_packages: '{{ kubee_os_packages | default([]) }}'
+        ans_x_os_admin_username: '{{ kubee_admin_username | default() }}'
+        ans_x_admin_public_key: '{{ kubee_admin_public_key | default() }}'
 
     - name: Installing Helm
       ansible.builtin.include_role:
         name: ans_x.ans_x_base.ans_x_helm
       vars:
-        ans_x_helm_version: "{{ kube_x_helm_version | default('3.16.3') }}"
-        ans_x_helm_plugins: '{{ kube_x_helm_plugins | default([]) }}'
+        ans_x_helm_version: "{{ kubee_helm_version | default('3.16.3') }}"
+        ans_x_helm_plugins: '{{ kubee_helm_plugins | default([]) }}'
 
     - name: Installing Longhorn Os Package
-      when: 'kube_x_longhorn_version is defined and kube_x_longhorn_version != ""'
+      when: 'kubee_longhorn_version is defined and kubee_longhorn_version != ""'
       ansible.builtin.include_role:
         name: ans_x.ans_x_base.ans_x_longhorn
       vars:
-        ans_x_longhorn_version: '{{ kube_x_longhorn_version }}'
+        ans_x_longhorn_version: '{{ kubee_longhorn_version }}'
 
 
 # ansible.builtin.import_playbook: Works only as play
@@ -33,13 +33,13 @@
 - name: Install Kube X
   ansible.builtin.import_playbook: k3s.orchestration.site.yml
   vars:
-    token: '{{ kube_x_k3s_token }}'
-    k3s_version: '{{ kube_x_k3s_version }}'
+    token: '{{ kubee_k3s_token }}'
+    k3s_version: '{{ kubee_k3s_version }}'
     api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
     # extra_server_args should be a string
     # We could also --disable-helm-controller
     # https://docs.k3s.io/cli/server
-    extra_server_args: "{{ ((kube_x_k3s_extra_server_args | default([])) + ['--disable=traefik']) | join(' ') }}"
+    extra_server_args: "{{ ((kubee_k3s_extra_server_args | default([])) + ['--disable=traefik']) | join(' ') }}"
 
 # Controle Node
 # https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145

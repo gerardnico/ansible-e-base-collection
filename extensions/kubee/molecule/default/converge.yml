@@ -19,6 +19,6 @@
 # https://docs.ansible.com/ansible/2.4/playbooks_reuse_includes.html
 # https://forum.ansible.com/t/missing-interpreter-line-for-builtin-modules/4242/3
 - name: Install K3s
-  ansible.builtin.import_playbook: ans_x.ans_x_collection.kube_x_site.yml
+  ansible.builtin.import_playbook: ans_x.ans_x_collection.kubee_site.yml
 
 

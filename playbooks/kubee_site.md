@@ -32,9 +32,9 @@ openssl rand -base64 64 | tr -d '\n'
 
 ### Run the playbook
 
-With the [kube_x_inventory.yml](../extensions/kube_x/kube_x_inventory.yml)
+With the [kubee_inventory.yml](../extensions/kubee/kubee_inventory.yml)
 ```bash
-ansible-playbook playbooks/kube_x_site.yml -i ../extensions/kube_x/kube_x_inventory.yml
+ansible-playbook playbooks/kubee_site.yml -i ../extensions/kubee/kubee_inventory.yml
 ```
 
 ### After
@@ -108,4 +108,4 @@ Dec 02 20:59:32 kube.example.com k3s[2593]: time="2024-12-02T20:59:32Z" level=in
 
 ## Test
 
-This playbook has a [molecule test](../extensions/kube_x/README.md)
+This playbook has a [molecule test](../extensions/kubee/README.md)

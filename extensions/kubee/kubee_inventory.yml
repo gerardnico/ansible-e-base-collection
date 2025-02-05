@@ -5,24 +5,24 @@ k3s_cluster:
   vars:
     ansible_user: root # the connecting user
     # an optional os admin user
-    kube_x_admin_username: admin
-    kube_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
+    kubee_admin_username: admin
+    kubee_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
     # optional helm server installation
-    kube_x_helm_version: '3.16.3'
-    kube_x_helm_plugins: []
+    kubee_helm_version: '3.16.3'
+    kubee_helm_plugins: []
     # Not mandatory (Set on the server at: /var/lib/rancher/k3s/server/token)
-    kube_x_k3s_token: jbHWvxxxx
-    kube_x_k3s_version: v1.31.2+k3s1
+    kubee_k3s_token: jbHWvxxxx
+    kubee_k3s_version: v1.31.2+k3s1
   children:
     # The name (server) can't be changed (hardcoded in dependent package)
     server:
       vars:
-        kube_x_k3s_extra_server_args: []
+        kubee_k3s_extra_server_args: []
       # An odd number of server nodes is required (3,5,7).
       # https://docs.k3s.io/datastore/ha-embedded
       hosts:
         kube_server_01:
-          kube_x_hostname: kube.example.com
+          kubee_hostname: kube.example.com
 #    agent:
 #      hosts:
 #        192.16.35.12:

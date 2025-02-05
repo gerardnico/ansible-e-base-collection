@@ -1,12 +1,12 @@
-# Molecule Testing for Kube-X
+# Molecule Testing for Kubee
 
 
 ## About
 
 This is the project directory of a molecule [docker scenario](molecule/default/README.md).
 
-This is the molecule project directory for the `kube_x` playbooks.
-* [](../../playbooks/kube_x_site.yml)
+This is the molecule project directory for the `kubee` playbooks.
+* [](../../playbooks/kubee_site.yml)
 
 Note: Normally the project directory is the `role` but in our playbook case. There is no role.
 
@@ -14,7 +14,7 @@ Note: Normally the project directory is the `role` but in our playbook case. The
 
 * Go to this project directory
 ```bash
-cd extensions/kube_x
+cd extensions/kubee
 ```
 
 > [WARNING]
@@ -38,7 +38,7 @@ molecule destroy -s docker
 
 ## Test/Verify
 
-Check [](../../playbooks/kube_x_site.md#installation-check)
+Check [](../../playbooks/kubee_site.md#installation-check)
 
 
 
