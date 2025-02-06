@@ -33,13 +33,13 @@
 - name: Install Kube X
   ansible.builtin.import_playbook: k3s.orchestration.site.yml
   vars:
-    token: '{{ kubee_k3s_token }}'
-    k3s_version: '{{ kubee_k3s_version }}'
+    token: '{{ k3s_token }}'
+    k3s_version: '{{ k3s_version }}'
     api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
     # extra_server_args should be a string
     # We could also --disable-helm-controller
     # https://docs.k3s.io/cli/server
-    extra_server_args: "{{ ((kubee_k3s_extra_server_args | default([])) + ['--disable=traefik']) | join(' ') }}"
+    extra_server_args: "{{ ((k3s_extra_server_args | default([])) + ['--disable=traefik']) | join(' ') }}"
 
 # Controle Node
 # https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145
