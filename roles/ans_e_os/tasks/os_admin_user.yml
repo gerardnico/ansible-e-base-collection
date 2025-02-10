@@ -37,6 +37,12 @@
   fail:
     msg: "The `ans_e_os_admin_public_key` is mandatory and was not found"
 
+- name: Validate SSH admin public key
+  ansible.builtin.assert:
+    that:
+      - "ans_e_os_admin_public_key is regex('^ssh-(rsa|dss|ecdsa|ed25519) [A-Za-z0-9+/=]+(?: .*)?$')"
+    fail_msg: "Invalid ans_e_os_admin_public_key variable: Wrong SSH public key format"
+
 # Or https://github.com/ansible-collections/ansible.posix/blob/main/docs/ansible.posix.authorized_key_module.rst
 - name: Add SSH key to authorized_keys
   ansible.builtin.copy:

@@ -1,5 +1,6 @@
 - name: Kubee OS
   hosts: k3s_cluster
+  become: yes
   tasks:
 
     - name: Executing Os Role
@@ -8,8 +9,8 @@
       vars:
         ans_e_os_hostname: '{{ kubee_os_hostname | default() }}'
         ans_e_os_packages: '{{ kubee_os_packages | default([]) }}'
-        ans_e_os_admin_username: '{{ kubee_admin_username | default() }}'
-        ans_e_admin_public_key: '{{ kubee_admin_public_key | default() }}'
+        ans_e_os_admin_username: '{{ kubee_os_admin_username | default() }}'
+        ans_e_os_admin_public_key: '{{ kubee_os_admin_public_key | default() }}'
 
     - name: Installing Helm
       ansible.builtin.include_role:
@@ -30,11 +31,14 @@
 # It's not a task
 # https://docs.ansible.com/ansible/2.4/playbooks_reuse_includes.html
 # https://forum.ansible.com/t/missing-interpreter-line-for-builtin-modules/4242/3
-- name: Install Kube X
+- name: Install K3s
   ansible.builtin.import_playbook: k3s.orchestration.site.yml
+  become: yes
   vars:
+    # Token
     token: '{{ k3s_token }}'
-    k3s_version: '{{ k3s_version }}'
+    # The below args will create a loop and crash ansible
+    # k3s_version: '{{ k3s_version }}'
     api_endpoint: "{{ hostvars[groups['server'][0]]['ansible_host'] | default(groups['server'][0]) }}"
     # extra_server_args should be a string
     # We could also --disable-helm-controller
