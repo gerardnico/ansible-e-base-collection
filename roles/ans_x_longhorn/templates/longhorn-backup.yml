@@ -5,7 +5,7 @@ metadata:
   name: longhorn-backup
   namespace: longhorn-system
 spec:
-  cron: "{{ ans_x_recurring_job_cron }}"
+  cron: "{{ ans_e_recurring_job_cron }}"
   # Task
   # backup: periodically create snapshots then do backups after cleaning up outdated snapshots
   # backup-force-create: periodically create snapshots the do backups

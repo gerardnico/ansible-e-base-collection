@@ -1,5 +1,11 @@
 # CONTRIB
 
+## Checkout out
+
+```bash
+git clone ~/.ansible/collections/ansible_collections/ans_e/ans_e_base
+```
+
 ## How to manage a image
 
 From the project directory

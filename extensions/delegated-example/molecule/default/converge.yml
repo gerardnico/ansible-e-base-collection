@@ -27,11 +27,11 @@
 
     - name: Executing Os Role
       ansible.builtin.include_role:
-        name: gerardnico.ansible_x_collection.ans_x_os
+        name: gerardnico.ansible_x_collection.ans_e_os
         #tasks_from: main.yml
       vars:
-        ans_x_admin_username: admin
-        ans_x_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
+        ans_e_admin_username: admin
+        ans_e_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
 
 # ansible.builtin.import_playbook: Works only as play
 # It's not a task

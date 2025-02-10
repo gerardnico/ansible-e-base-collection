@@ -10,8 +10,8 @@ This is needed if you use Ansible to deploy `Helm` as the command is run on the 
 
 ## vars
 
-* `ans_x_helm_version`: the [helm release version](https://github.com/helm/helm/releases)
-* `ans_x_helm_plugins`: a list of plugin with properties of [helm_plugin_module](https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_plugin_module.html) 
+* `ans_e_helm_version`: the [helm release version](https://github.com/helm/helm/releases)
+* `ans_e_helm_plugins`: a list of plugin with properties of [helm_plugin_module](https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_plugin_module.html) 
   * Only `plugin_path`, `plugin_version` and `state`
 
 
@@ -23,10 +23,10 @@ This is needed if you use Ansible to deploy `Helm` as the command is run on the 
 - name: Play
   hosts: all
   roles:
-    - role: ans_x_helm
+    - role: ans_e_helm
       vars:
-        ans_x_helm_version: 3.16.3
-        ans_x_helm_plugins:
+        ans_e_helm_version: 3.16.3
+        ans_e_helm_plugins:
           - plugin_path: https://github.com/databus23/helm-diff
             plugin_version: 3.9.12
             state: present
@@ -42,8 +42,8 @@ To avoid the below warning, you should install [helm-diff](https://github.com/da
 
 The `yaml` python module is mandatory.
 
-With `ans_x_os_packages`
+With `ans_e_os_packages`
 ```bash
-ans_x_os_packages:
+ans_e_os_packages:
   - python3-apt
 ```

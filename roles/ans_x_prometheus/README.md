@@ -18,12 +18,12 @@ on all nodes (ie single node context)
 
     - name: Executing Prometheus Role
       ansible.builtin.include_role:
-        name: ans_x.ans_x_base.ans_x_prometheus
+        name: ans_e.ans_e_base.ans_e_prometheus
       vars:
-        ans_x_prometheus_user_name: 'prometheus'
-        ans_x_prometheus_version: 2.48.0-rc.0
+        ans_e_prometheus_user_name: 'prometheus'
+        ans_e_prometheus_version: 2.48.0-rc.0
         # See defaults/main.yml for all variables        
 ```
 ```bash
-ansible-playbook ans_x_playbook_prometheus.yml -i inventory.yml --vault-id passphrase.sh
+ansible-playbook ans_e_playbook_prometheus.yml -i inventory.yml --vault-id passphrase.sh
 ```

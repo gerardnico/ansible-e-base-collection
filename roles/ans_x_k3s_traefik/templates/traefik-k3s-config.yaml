@@ -5,4 +5,4 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
-    {{ ans_x_k3s_traefik_helm_values | to_yaml | indent(4)}}
+    {{ ans_e_k3s_traefik_helm_values | to_yaml | indent(4)}}

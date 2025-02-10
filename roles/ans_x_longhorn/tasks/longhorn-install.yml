@@ -2,7 +2,7 @@
   # run_once: run on the first host available
   run_once: true
   kubernetes.core.k8s:
-    name: "{{ ans_x_longhorn_namespace }}"
+    name: "{{ ans_e_longhorn_namespace }}"
     api_version: v1
     kind: Namespace
     state: present
@@ -42,12 +42,12 @@
     release_name: longhorn
     # repo/name, helm chart name
     chart_ref: longhorn/longhorn
-    chart_version: '{{ ans_x_longhorn_version }}'
+    chart_version: '{{ ans_e_longhorn_version }}'
     release_state: present
-    release_namespace: '{{ ans_x_longhorn_namespace }}'
+    release_namespace: '{{ ans_e_longhorn_namespace }}'
     create_namespace: true
     kubeconfig: '{{ kubeconfig }}'
-    release_values: '{{ ans_x_longhorn_chart_values }}'
+    release_values: '{{ ans_e_longhorn_chart_values }}'
 
 - name: 'Log: Command executed by the previous helm command'
   run_once: true

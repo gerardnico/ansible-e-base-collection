@@ -1,51 +1,51 @@
 ---
 
 # App environment (suffix, prefix) used everywhere
-ans_x_prometheus_name: prometheus
+ans_e_prometheus_name: prometheus
 
 # The temp installation environment
-ans_x_prometheus_install_dir: '/tmp/{{ans_x_prometheus_user_name}}'
+ans_e_prometheus_install_dir: '/tmp/{{ans_e_prometheus_user_name}}'
 
 # The user
-ans_x_prometheus_user_name: prometheus
-ans_x_prometheus_user_group: prometheus
-ans_x_prometheus_user_home: '/home/{{ ans_x_prometheus_user }}'
+ans_e_prometheus_user_name: prometheus
+ans_e_prometheus_user_group: prometheus
+ans_e_prometheus_user_home: '/home/{{ ans_e_prometheus_user }}'
 
 # The target installation environment
-ans_x_prometheus_base: /opt/prometheus
+ans_e_prometheus_base: /opt/prometheus
 
 ################
 ## Prometheus
 ################
 # The prometheus binary data
-ans_x_prometheus_version: 2.48.0-rc.0
-ans_x_prometheus_binary_name: "prometheus-{{ ans_x_prometheus_version }}.linux-amd64"
-ans_x_prometheus_binary_url: "https://github.com/prometheus/prometheus/releases/download/v{{ ans_x_prometheus_version }}/{{ ans_x_prometheus_binary_name }}.tar.gz"
-ans_x_prometheus_checksum: sha256:44c384d88843af110b18f203db9e682b61b6f703026cf45a015e88705050d4de
+ans_e_prometheus_version: 2.48.0-rc.0
+ans_e_prometheus_binary_name: "prometheus-{{ ans_e_prometheus_version }}.linux-amd64"
+ans_e_prometheus_binary_url: "https://github.com/prometheus/prometheus/releases/download/v{{ ans_e_prometheus_version }}/{{ ans_e_prometheus_binary_name }}.tar.gz"
+ans_e_prometheus_checksum: sha256:44c384d88843af110b18f203db9e682b61b6f703026cf45a015e88705050d4de
 
 # Service
-ans_x_prometheus_port: 9090
+ans_e_prometheus_port: 9090
 
 # File System
-ans_x_prometheus_home: "{{ ans_x_prometheus_base }}/{{ ans_x_prometheus_name }}"
-ans_x_prometheus_bin_file: "{{ ans_x_prometheus_home }}/prometheus"
-ans_x_prometheus_log_dir: "{{ ans_x_prometheus_home }}/log"
-ans_x_prometheus_config_dir: "{{ ans_x_prometheus_home }}/custom/conf"
-ans_x_prometheus_repositories: "{{ ans_x_prometheus_home }}/prometheus-repositories"
-ans_x_prometheus_data_name_dir: data
-ans_x_prometheus_data_dir: "{{ ans_x_prometheus_home }}/{{ ans_x_prometheus_data_name_dir }}"
-ans_x_prometheus_data_path_relative: "{{ ans_x_prometheus_data_dir }}/prometheus" # use in the conf file
+ans_e_prometheus_home: "{{ ans_e_prometheus_base }}/{{ ans_e_prometheus_name }}"
+ans_e_prometheus_bin_file: "{{ ans_e_prometheus_home }}/prometheus"
+ans_e_prometheus_log_dir: "{{ ans_e_prometheus_home }}/log"
+ans_e_prometheus_config_dir: "{{ ans_e_prometheus_home }}/custom/conf"
+ans_e_prometheus_repositories: "{{ ans_e_prometheus_home }}/prometheus-repositories"
+ans_e_prometheus_data_name_dir: data
+ans_e_prometheus_data_dir: "{{ ans_e_prometheus_home }}/{{ ans_e_prometheus_data_name_dir }}"
+ans_e_prometheus_data_path_relative: "{{ ans_e_prometheus_data_dir }}/prometheus" # use in the conf file
 
 
 ################
 ## Prometheus Node Exporter
 ################
-ans_x_prometheus_node_exporter_home: "{{ prometheus_base }}/node_exporter"
-ans_x_prometheus_node_exporter_version: 1.0.0-rc.0
-ans_x_prometheus_node_exporter_name: "node_exporter-{{ans_x_prometheus_node_exporter_version}}.linux-amd64"
-ans_x_prometheus_node_exporter_binary_url: "https://github.com/prometheus/node_exporter/releases/download/v{{ans_x_prometheus_node_exporter_version}}/{{ ans_x_prometheus_node_exporter_name }}.tar.gz"
-ans_x_prometheus_node_exporter_checksum: md5:02b59d17fc7b58df81632f9fbdce01b5
-ans_x_prometheus_node_exporter_port: 9100
+ans_e_prometheus_node_exporter_home: "{{ prometheus_base }}/node_exporter"
+ans_e_prometheus_node_exporter_version: 1.0.0-rc.0
+ans_e_prometheus_node_exporter_name: "node_exporter-{{ans_e_prometheus_node_exporter_version}}.linux-amd64"
+ans_e_prometheus_node_exporter_binary_url: "https://github.com/prometheus/node_exporter/releases/download/v{{ans_e_prometheus_node_exporter_version}}/{{ ans_e_prometheus_node_exporter_name }}.tar.gz"
+ans_e_prometheus_node_exporter_checksum: md5:02b59d17fc7b58df81632f9fbdce01b5
+ans_e_prometheus_node_exporter_port: 9100
 
 
 ################

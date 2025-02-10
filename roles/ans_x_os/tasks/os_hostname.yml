@@ -3,15 +3,15 @@
 # In test with molecule, we may use `molecule_driver_name == 'docker`
 # https://ansible.readthedocs.io/projects/molecule/configuration/#molecule.interpolation.Interpolator.interpolate
 - name: 'Check Hostname'
-  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_x_os_hostname'
+  when: 'ansible_virtualization_type == "docker" and ansible_fqdn != ans_e_os_hostname'
   fail:
-    msg: "On this docker container, the hostname is ({{ ansible_fqdn }}). It should be set to ({{ ans_x_os_hostname }}) via the `hostname` flag"
+    msg: "On this docker container, the hostname is ({{ ansible_fqdn }}). It should be set to ({{ ans_e_os_hostname }}) via the `hostname` flag"
 
 
 - name: 'Modify hostname'
   when: 'ansible_virtualization_type != "docker"'
   hostname:
-    name: '{{ ans_x_os_hostname }}'
+    name: '{{ ans_e_os_hostname }}'
 
 
 - name: Configure the IP_Name
@@ -29,6 +29,6 @@
     marker: "# {mark} ANSIBLE MANAGED BLOCK Hostname"
   with_items:
     # name: foo.example.com  NAME
-    - { fqdn: "{{ ans_x_os_hostname }}", name: "{{ ans_x_os_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
+    - { fqdn: "{{ ans_e_os_hostname }}", name: "{{ ans_e_os_hostname.split('.', 1)[0] }}", ip: '{{ ansible_default_ipv4.address }}' }
 
 

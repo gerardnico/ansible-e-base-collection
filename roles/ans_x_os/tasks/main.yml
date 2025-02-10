@@ -21,15 +21,15 @@
   tags: os-package
 
 - name: Admin User
-  when: 'ans_x_os_admin_username is defined and ans_x_os_admin_username != ""'
+  when: 'ans_e_os_admin_username is defined and ans_e_os_admin_username != ""'
   become: true
   import_tasks: 'os_admin_user.yml'
   tags: user
 
 - name: 'Fail if hostname is undefined'
-  when: 'ans_x_os_hostname is undefined'
+  when: 'ans_e_os_hostname is undefined'
   fail:
-    msg: "The `ans_x_os_hostname` variable should be set."
+    msg: "The `ans_e_os_hostname` variable should be set."
 
 - name: Configure the FQDN Hostname
   become: true
@@ -43,6 +43,6 @@
 #  tags: os-cgroups
 
 - name: Selinux
-  when: "'libselinux' in ansible_facts.packages and ans_x_selinux_disabled is true"
+  when: "'libselinux' in ansible_facts.packages and ans_e_selinux_disabled is true"
   include_tasks: 'os_selinux.yml'
   tags: os-selinux

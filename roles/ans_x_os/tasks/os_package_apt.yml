@@ -12,6 +12,6 @@
 
 - name: "Apt - Install Utility Packages"
   ansible.builtin.apt:
-    pkg: "{{ ans_x_os_packages }}"
+    pkg: "{{ ans_e_os_packages }}"
     state: present
 

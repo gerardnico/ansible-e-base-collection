@@ -10,12 +10,12 @@ This role execute common init/bootstrap tasks:
 
 ## Vars
 
-* `ans_x_os_hostname`: the full qualified os name
-* `ans_x_os_admin_username`: `Optional` an admin user (sudo wheel user)
-* `ans_x_os_admin_public_key`: `Optional` the admin user public key
-* `ans_x_os_packages`: `Optional` a list of packages to install
-* `ans_x_os_packages_epel_repo_enabled`: `Optional` a boolean to add or no [Extra Packages for Enterprise Linux (epel)](https://docs.fedoraproject.org/en-US/epel/) (yum base only)
-* `ans_x_selinux_disabled`: `Optional` default to true
+* `ans_e_os_hostname`: the full qualified os name
+* `ans_e_os_admin_username`: `Optional` an admin user (sudo wheel user)
+* `ans_e_os_admin_public_key`: `Optional` the admin user public key
+* `ans_e_os_packages`: `Optional` a list of packages to install
+* `ans_e_os_packages_epel_repo_enabled`: `Optional` a boolean to add or no [Extra Packages for Enterprise Linux (epel)](https://docs.fedoraproject.org/en-US/epel/) (yum base only)
+* `ans_e_selinux_disabled`: `Optional` default to true
 
 ## Example / Usage
 
@@ -26,13 +26,13 @@ all:
     group:
       vars:
         # Username of the admin user (sudo wheel user)
-        ans_x_os_admin_username: admin
+        ans_e_os_admin_username: admin
         # the public key of the admin user (mandatory with an admin user)
-        ans_x_os_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
+        ans_e_os_admin_public_key: ssh-rsa AAAAB3NzaC1yxxxx
         # Do not disable selinux (default true)
-        ans_x_selinux_disabled: false
+        ans_e_selinux_disabled: false
         # Packages
-        ans_x_os_packages:
+        ans_e_os_packages:
           - curl # needed to download k3s
           - git
           - jq
@@ -50,11 +50,11 @@ all:
           - netcat-openbsd
           - bind9-utils # dig
         # Install epel
-        ans_x_os_packages_epel_repo_enabled: true
+        ans_e_os_packages_epel_repo_enabled: true
       hosts:
         my_ansible_server_name:
           # Hostname in a FQDN form (ie name.apex.tld)
-          ans_x_os_hostname: kube-server-01.example.com
+          ans_e_os_hostname: kube-server-01.example.com
 ```
 
 

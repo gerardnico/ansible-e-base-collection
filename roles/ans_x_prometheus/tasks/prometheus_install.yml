@@ -2,7 +2,7 @@
 
 - name: Check if Prometheus is already installed.
   stat:
-    path: "{{ ans_x_prometheus_home }}/prometheus"
+    path: "{{ ans_e_prometheus_home }}/prometheus"
   register: prometheus
 - name: Download
   when: not prometheus.stat.exists
@@ -10,32 +10,32 @@
 
     - name: Download Prometheus
       get_url:
-        url: "{{ ans_x_prometheus_binary_url }}"
-        dest: "{{ ans_x_prometheus_install_dir }}/prometheus.tar.gz"
-        owner: "{{ ans_x_prometheus_user_name }}"
-        group: "{{ ans_x_prometheus_user_group }}"
-        checksum: "{{ ans_x_prometheus_checksum }}"
+        url: "{{ ans_e_prometheus_binary_url }}"
+        dest: "{{ ans_e_prometheus_install_dir }}/prometheus.tar.gz"
+        owner: "{{ ans_e_prometheus_user_name }}"
+        group: "{{ ans_e_prometheus_user_group }}"
+        checksum: "{{ ans_e_prometheus_checksum }}"
 
     - name: Unzip Prometheus Binary
       unarchive:
-        src: "{{ ans_x_prometheus_install_dir }}/prometheus.tar.gz"
-        dest: "{{ ans_x_prometheus_install_dir }}"
-        owner: "{{ ans_x_prometheus_user_name }}"
-        group: "{{ ans_x_prometheus_user_group }}"
+        src: "{{ ans_e_prometheus_install_dir }}/prometheus.tar.gz"
+        dest: "{{ ans_e_prometheus_install_dir }}"
+        owner: "{{ ans_e_prometheus_user_name }}"
+        group: "{{ ans_e_prometheus_user_group }}"
         copy: false
     - name: Move files
       become: yes
-      become_user: "{{ ans_x_prometheus_user_name }}"
+      become_user: "{{ ans_e_prometheus_user_name }}"
       shell:
-        cmd: "/bin/cp -rf {{ ans_x_prometheus_install_dir }}/{{ ans_x_prometheus_binary_name }}/* {{ ans_x_prometheus_home }}"
+        cmd: "/bin/cp -rf {{ ans_e_prometheus_install_dir }}/{{ ans_e_prometheus_binary_name }}/* {{ ans_e_prometheus_home }}"
 
 - name: Copy the configuration prometheus.yml
   notify: 'restart prom'
   template:
     src: prometheus.yml
-    dest: "{{ ans_x_prometheus_home }}/prometheus.yml"
-    owner: "{{ ans_x_prometheus_user_name }}"
-    group: "{{ ans_x_prometheus_user_group }}"
+    dest: "{{ ans_e_prometheus_home }}/prometheus.yml"
+    owner: "{{ ans_e_prometheus_user_name }}"
+    group: "{{ ans_e_prometheus_user_group }}"
 
 - name: Copy the systemd prometheus.service file
   notify: 'restart prom'

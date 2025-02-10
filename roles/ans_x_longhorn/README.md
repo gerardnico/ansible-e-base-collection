@@ -19,7 +19,7 @@ the volume across multiple replicas stored on multiple nodes.
 
 ## Prerequisites
 
-* Helm should be on the target host. You can use the [ans_x_helm_role](../ans_x_helm) for that.
+* Helm should be on the target host. You can use the [ans_e_helm_role](../ans_e_helm) for that.
 
 ## Example / Usage
 
@@ -34,14 +34,14 @@ The OS configuration runs each time. It:
 - name: Play
   hosts: all
   roles:
-    - role: ans_x_longhorn
+    - role: ans_e_longhorn
 ```
 
 ### Install Longhorn via a Chart
 
-If you set the `ans_x_longhorn_version` variable value, this playbook will install longhorn via the Helm Chart
+If you set the `ans_e_longhorn_version` variable value, this playbook will install longhorn via the Helm Chart
 
-You can even pass the chart values via the `ans_x_longhorn_chart_values` variable.
+You can even pass the chart values via the `ans_e_longhorn_chart_values` variable.
 
 The namespace is `longhorn-system`
 
@@ -52,20 +52,20 @@ Example:
   gather_facts: true
   become: true
   roles:
-    - role: ans_x_longhorn
+    - role: ans_e_longhorn
       vars:
         # The version is m
-        ans_x_longhorn_version: "1.7.0"
+        ans_e_longhorn_version: "1.7.0"
         # The chart values
         # [Doc](https://longhorn.io/docs/1.6.2/advanced-resources/deploy/customizing-default-settings/#using-helm)
         # [Default values file](https://raw.githubusercontent.com/longhorn/charts/master/charts/longhorn/values.yaml)
-        ans_x_longhorn_chart_values:
+        ans_e_longhorn_chart_values:
           defaultSettings:
             defaultReplicaCount: 1
             defaultDataLocality: strict-local
             # https://longhorn.io/docs/1.6.2/snapshots-and-backups/backup-and-restore/set-backup-target/
             # backupTarget: s3://longhorn-backup@us/
-            # backupTargetCredentialSecret: '{{ ans_x_longhorn_s3_secret_name }}'
+            # backupTargetCredentialSecret: '{{ ans_e_longhorn_s3_secret_name }}'
             #        createDefaultDiskLabeledNodes: true
             #        defaultDataPath: /var/lib/longhorn-example/
             #        replicaSoftAntiAffinity: false
@@ -99,9 +99,9 @@ The ingress depends on:
 * Cert Manager
 
 The variables are:
-* `ans_x_longhorn_hostname`: the host name in your DNS
-* `ans_x_cert_manager_issuer_name`: the cert manager issuer (generally `letsencrypt-prod` or `letsencrypt-staging`)
-* `ans_x_longhorn_frontend_basic_auth_users`: the users in a list. See [how to add an ingress user](#how-to-add-an-ingress-user) for the values
+* `ans_e_longhorn_hostname`: the host name in your DNS
+* `ans_e_cert_manager_issuer_name`: the cert manager issuer (generally `letsencrypt-prod` or `letsencrypt-staging`)
+* `ans_e_longhorn_frontend_basic_auth_users`: the users in a list. See [how to add an ingress user](#how-to-add-an-ingress-user) for the values
 
 
 ```yaml
@@ -110,20 +110,20 @@ The variables are:
   gather_facts: true
   become: true
   roles:
-    - role: ans_x_longhorn
+    - role: ans_e_longhorn
       vars:
         # Version and Chart values omitted
         # ...
         # Hostname
-        ans_x_longhorn_hostname: "longhorn.i.eraldy.com"
+        ans_e_longhorn_hostname: "longhorn.i.eraldy.com"
         # List of users
         # Below is the user `admin@traefik` with the password `welcome`
-        ans_x_longhorn_frontend_basic_auth_users:
+        ans_e_longhorn_frontend_basic_auth_users:
           - admin@traefik:$apr1$9qTj0zBl$ZmA009UNx3RMOBxALIKLB1
         # The cert manager issuer
-        ans_x_cert_manager_issuer_name: 'letsencrypt-prod'
+        ans_e_cert_manager_issuer_name: 'letsencrypt-prod'
         # Cron Job
-        ans_x_recurring_job_cron: "0 1 * * *"
+        ans_e_recurring_job_cron: "0 1 * * *"
 ```
 
 #### How to add an Ingress user
@@ -135,21 +135,21 @@ htpasswd -nb admin@traefik welcome
 # example output: `admin@traefik:$apr1$9qTj0zBl$ZmA009UNx3RMOBxALIKLB1`
 ```
 ```yaml
-ans_x_longhorn_frontend_basic_auth_users:
+ans_e_longhorn_frontend_basic_auth_users:
   - admin@traefik:$apr1$9qTj0zBl$ZmA009UNx3RMOBxALIKLB1
 ```
 The password is bcrypt hashed, it should be safe to store it in the repo, but you can encrypt it further with `ansible vault`
 
 ### CronJob Backup
 
-If the `ans_x_recurring_job_cron` is set, it will add a [Backup CronJob](https://longhorn.io/docs/1.6.2/snapshots-and-backups/scheduling-backups-and-snapshots/#using-the-manifest) 
+If the `ans_e_recurring_job_cron` is set, it will add a [Backup CronJob](https://longhorn.io/docs/1.6.2/snapshots-and-backups/scheduling-backups-and-snapshots/#using-the-manifest) 
 with this [backup manifest](templates/longhorn-backup.yml)
 
 The variables are all mandatory:
-* `ans_x_recurring_job_cron`: the cron expression
-* `ans_x_longhorn_s3_key_id`: the s3 access key
-* `ans_x_longhorn_s3_key_secret`: the s3 access key secret
-* `ans_x_longhorn_s3_endpoints`: the endpoints
+* `ans_e_recurring_job_cron`: the cron expression
+* `ans_e_longhorn_s3_key_id`: the s3 access key
+* `ans_e_longhorn_s3_key_secret`: the s3 access key secret
+* `ans_e_longhorn_s3_endpoints`: the endpoints
 
 ```yaml
 - name: Setup Longhorn
@@ -157,14 +157,14 @@ The variables are all mandatory:
   gather_facts: true
   become: true
   roles:
-    - role: ans_x_longhorn
+    - role: ans_e_longhorn
       vars:
         # Version and Chart values omitted
         # Ingress vars omitted
         # Cron Job expression for a daily backup
-        ans_x_recurring_job_cron: "0 1 * * *"
+        ans_e_recurring_job_cron: "0 1 * * *"
         # s3 parameters
-        ans_x_longhorn_s3_key_id:  !vault 
-        ans_x_longhorn_s3_key_secret: !vault
-        ans_x_longhorn_s3_endpoints: https://h0k0.ca.idrivee2-22.com
+        ans_e_longhorn_s3_key_id:  !vault 
+        ans_e_longhorn_s3_key_secret: !vault
+        ans_e_longhorn_s3_endpoints: https://h0k0.ca.idrivee2-22.com
 ```

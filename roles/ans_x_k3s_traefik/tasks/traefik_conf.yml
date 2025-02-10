@@ -26,7 +26,7 @@
 
 - name: Set a fact for the GitHub Hooks CIDR
   set_fact:
-    github_hooks_cidr: "{{ github_hooks_cidr.stdout.split('\n') + ans_x_k3s_traefik_private_kube_admin_network }}"
+    github_hooks_cidr: "{{ github_hooks_cidr.stdout.split('\n') + ans_e_k3s_traefik_private_kube_admin_network }}"
 
 - name: Echo the GitHub CIDR lists
   debug:

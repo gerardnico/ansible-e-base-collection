@@ -4,26 +4,26 @@
 
     - name: Executing Os Role
       ansible.builtin.include_role:
-        name: ans_x.ans_x_base.ans_x_os
+        name: ans_e.ans_e_base.ans_e_os
       vars:
-        ans_x_os_hostname: '{{ kubee_os_hostname | default() }}'
-        ans_x_os_packages: '{{ kubee_os_packages | default([]) }}'
-        ans_x_os_admin_username: '{{ kubee_admin_username | default() }}'
-        ans_x_admin_public_key: '{{ kubee_admin_public_key | default() }}'
+        ans_e_os_hostname: '{{ kubee_os_hostname | default() }}'
+        ans_e_os_packages: '{{ kubee_os_packages | default([]) }}'
+        ans_e_os_admin_username: '{{ kubee_admin_username | default() }}'
+        ans_e_admin_public_key: '{{ kubee_admin_public_key | default() }}'
 
     - name: Installing Helm
       ansible.builtin.include_role:
-        name: ans_x.ans_x_base.ans_x_helm
+        name: ans_e.ans_e_base.ans_e_helm
       vars:
-        ans_x_helm_version: "{{ kubee_helm_version | default('3.16.3') }}"
-        ans_x_helm_plugins: '{{ kubee_helm_plugins | default([]) }}'
+        ans_e_helm_version: "{{ kubee_helm_version | default('3.16.3') }}"
+        ans_e_helm_plugins: '{{ kubee_helm_plugins | default([]) }}'
 
     - name: Installing Longhorn Os Package
       when: 'kubee_longhorn_version is defined and kubee_longhorn_version != ""'
       ansible.builtin.include_role:
-        name: ans_x.ans_x_base.ans_x_longhorn
+        name: ans_e.ans_e_base.ans_e_longhorn
       vars:
-        ans_x_longhorn_version: '{{ kubee_longhorn_version }}'
+        ans_e_longhorn_version: '{{ kubee_longhorn_version }}'
 
 
 # ansible.builtin.import_playbook: Works only as play

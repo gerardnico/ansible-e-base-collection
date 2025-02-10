@@ -14,5 +14,5 @@
       --dns-ovh-propagation-seconds 60 \
       -n \
       --agree-tos \
-      -m {{ ans_x_certbot_letsencrypt_email }} \
+      -m {{ ans_e_certbot_letsencrypt_email }} \
       -d {{ letsencrypt_domain }}

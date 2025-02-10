@@ -1,15 +1,15 @@
 # https://community.hetzner.com/tutorials/securing-ssh
 
 - name: Root Login
-  when: ans_x_sshd_permit_root_login is False
+  when: ans_e_sshd_permit_root_login is False
   block:
     # Because we deny root login, we need to check user existence
-    - name: Check ans_x_sshd_allowed_users
-      loop: "{{ ans_x_sshd_allowed_users }}"
+    - name: Check ans_e_sshd_allowed_users
+      loop: "{{ ans_e_sshd_allowed_users }}"
       loop_control:
-        loop_var: ans_x_sshd_allowed_user
+        loop_var: ans_e_sshd_allowed_user
       ansible.builtin.include_tasks:
-        file: os_ans_x_sshd_check_allowed_user.yml
+        file: os_ans_e_sshd_check_allowed_user.yml
         apply:
           tags: sshd
 
@@ -53,15 +53,15 @@
 # https://man.openbsd.org/sshd_config#DenyUsers
 - name: Sshd - No access to the user provided by the VPS provider
   when:
-    - ans_x_sshd_deny_users is defined
-    - ans_x_sshd_deny_users is not string
-    - ans_x_sshd_deny_users is not mapping
-    - ans_x_sshd_deny_users is iterable
-    - ans_x_sshd_deny_users | length > 0
+    - ans_e_sshd_deny_users is defined
+    - ans_e_sshd_deny_users is not string
+    - ans_e_sshd_deny_users is not mapping
+    - ans_e_sshd_deny_users is iterable
+    - ans_e_sshd_deny_users | length > 0
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^DenyUsers"
-    line: "DenyUsers {{ ans_x_sshd_deny_users | join(' ') }}"
+    line: "DenyUsers {{ ans_e_sshd_deny_users | join(' ') }}"
     insertafter: EOF
     state: present
   notify: ssh reload
@@ -117,15 +117,15 @@
 # AllowUsers nickeau www-user@oeg.gerardnico.com backend@oeg.gerardnico.com
 - name: Ensure sshd_config contains AllowUsers directive
   when:
-    - ans_x_sshd_allowed_users is defined
-    - ans_x_sshd_allowed_users is not string
-    - ans_x_sshd_allowed_users is not mapping
-    - ans_x_sshd_allowed_users is iterable
-    - ans_x_sshd_allowed_users | length > 0
+    - ans_e_sshd_allowed_users is defined
+    - ans_e_sshd_allowed_users is not string
+    - ans_e_sshd_allowed_users is not mapping
+    - ans_e_sshd_allowed_users is iterable
+    - ans_e_sshd_allowed_users | length > 0
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^AllowUsers'
-    line: "AllowUsers {{ ans_x_sshd_allowed_users | join(' ') }}"
+    line: "AllowUsers {{ ans_e_sshd_allowed_users | join(' ') }}"
     create: yes
     state: present
     backup: yes

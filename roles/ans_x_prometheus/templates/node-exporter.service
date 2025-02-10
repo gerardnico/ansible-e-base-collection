@@ -7,16 +7,16 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ ans_x_prometheus_user_name }}
-Group={{ ans_x_prometheus_user_group }}
-WorkingDirectory={{ ans_x_prometheus_node_exporter_home }}
+User={{ ans_e_prometheus_user_name }}
+Group={{ ans_e_prometheus_user_group }}
+WorkingDirectory={{ ans_e_prometheus_node_exporter_home }}
 # You can enable collector that are disabled by default
 # See https://github.com/prometheus/node_exporter#disabled-by-default
 # Example:
-# ExecStart={{ ans_x_prometheus_node_exporter_home }}/node_exporter --collector.systemd –-collector.processes
-ExecStart={{ ans_x_prometheus_node_exporter_home }}/node_exporter
+# ExecStart={{ ans_e_prometheus_node_exporter_home }}/node_exporter --collector.systemd –-collector.processes
+ExecStart={{ ans_e_prometheus_node_exporter_home }}/node_exporter
 Restart=always
-Environment=USER={{ ans_x_prometheus_user_name }} HOME={{ ans_x_prometheus_node_exporter_home }}
+Environment=USER={{ ans_e_prometheus_user_name }} HOME={{ ans_e_prometheus_node_exporter_home }}
 
 
 [Install]

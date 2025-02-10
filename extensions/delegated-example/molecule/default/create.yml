@@ -42,7 +42,7 @@
                 hosts:
                   "{{ item.name }}":
                     ansible_connection: community.docker.docker
-                    ans_x_hostname: kube.example.com
+                    ans_e_hostname: kube.example.com
       ansible.builtin.set_fact:
         molecule_inventory: >
           {{ molecule_inventory | combine(inventory_partial_yaml | from_yaml, recursive=true) }}

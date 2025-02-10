@@ -15,7 +15,7 @@
     mode: 600
 
 - name: Get the Cloudflare certificate {{ item.key }}
-  with_dict: "{{ans_x_certbot_cloudflare_domains}}"
+  with_dict: "{{ans_e_certbot_cloudflare_domains}}"
   include_tasks: certbot_certonly_cloudflare.yml
   vars:
     letsencrypt_domain: '{{ item.value.fqdn }}'

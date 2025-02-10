@@ -7,7 +7,7 @@
 ################################################
 
 # Kubernetes namespace where Longhorn resources should be installed
-ans_x_longhorn_namespace: "longhorn-system"
+ans_e_longhorn_namespace: "longhorn-system"
 
 # the location of the kubeconfig
 kubeconfig: '/home/{{ ansible_user }}/.kube/config'
@@ -17,13 +17,13 @@ kubeconfig: '/home/{{ ansible_user }}/.kube/config'
 ################################################
 
 # For consistency
-ans_x_longhorn_s3_secret_name: longhorn-s3-secret
+ans_e_longhorn_s3_secret_name: longhorn-s3-secret
 
 # The middleware auth name
-ans_x_longhorn_frontend_middleware_auth_name: longhorn-frontend-auth
+ans_e_longhorn_frontend_middleware_auth_name: longhorn-frontend-auth
 # The secret name of the basic auth authentication
-ans_x_longhorn_frontend_basic_auth_secret_name: longhorn-frontend-basic-auth-users
+ans_e_longhorn_frontend_basic_auth_secret_name: longhorn-frontend-basic-auth-users
 
 # The secret name should be consistent between the ingress route and the cert
-ans_x_longhorn_frontend_cert_name: longhorn-frontend-cert
-ans_x_longhorn_frontend_cert_secret_name: longhorn-frontend-cert-secret
+ans_e_longhorn_frontend_cert_name: longhorn-frontend-cert
+ans_e_longhorn_frontend_cert_secret_name: longhorn-frontend-cert-secret

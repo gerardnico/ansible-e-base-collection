@@ -6,14 +6,14 @@ After=network.target
 
 [Service]
 Type=simple
-User={{ ans_x_prometheus_user_name }}
-Group={{ ans_x_prometheus_user_group }}
-WorkingDirectory={{ ans_x_prometheus_home }}
-ExecStart={{ ans_x_prometheus_home }}/prometheus \
-  --config.file={{ ans_x_prometheus_home }}/prometheus.yml \
-  --web.listen-address=:{{ ans_x_prometheus_port }}
+User={{ ans_e_prometheus_user_name }}
+Group={{ ans_e_prometheus_user_group }}
+WorkingDirectory={{ ans_e_prometheus_home }}
+ExecStart={{ ans_e_prometheus_home }}/prometheus \
+  --config.file={{ ans_e_prometheus_home }}/prometheus.yml \
+  --web.listen-address=:{{ ans_e_prometheus_port }}
 Restart=always
-Environment=USER={{ ans_x_prometheus_user_name }} HOME={{ ans_x_prometheus_home }}
+Environment=USER={{ ans_e_prometheus_user_name }} HOME={{ ans_e_prometheus_home }}
 
 
 [Install]

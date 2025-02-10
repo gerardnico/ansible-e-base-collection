@@ -21,11 +21,11 @@ The inventory should follow the [k3s ansible one](https://github.com/k3s-io/k3s-
   hosts: servers
   become: true
   roles:
-    - role: ans_x_k3s_traefik
+    - role: ans_e_k3s_traefik
       tags: traefik
       vars:
-        ans_x_k3s_traefik_dashboard_hostname: 'traefik.i.example.com'
-        ans_x_k3s_traefik_dashboard_basic_auth_users:
+        ans_e_k3s_traefik_dashboard_hostname: 'traefik.i.example.com'
+        ans_e_k3s_traefik_dashboard_basic_auth_users:
           # A list with one user by item 
           # where the value is the output of the command `htpasswd`.
           # -------------
@@ -44,7 +44,7 @@ The inventory should follow the [k3s ansible one](https://github.com/k3s-io/k3s-
           # The below line represents the user `admin@traefik` with the password `welcome`
           - admin@traefik:$apr1$9qTj0zBl$ZmA009UNx3RMOBxALIKLB1
         # https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
-        ans_x_k3s_traefik_helm_values:
+        ans_e_k3s_traefik_helm_values:
           service:
             spec: {
               externalTrafficPolicy: Cluster # Allow Origin Remote IP to be forwarded
@@ -80,16 +80,16 @@ The inventory should follow the [k3s ansible one](https://github.com/k3s-io/k3s-
 ### Dashboard Access
 
 The dashboard will be accessible:
-  * via the hostname (variable `ans_x_k3s_traefik_dashboard_hostname`)
+  * via the hostname (variable `ans_e_k3s_traefik_dashboard_hostname`)
   * secured by `basic auth` 
-  * by the basic auth users (Variable `ans_x_k3s_traefik_dashboard_basic_auth_users`
+  * by the basic auth users (Variable `ans_e_k3s_traefik_dashboard_basic_auth_users`
     * The default User is: 
       * username: `admin@traefik` 
       * password: `welcome`
 
 ### Values Customization
 
-Helm Values customization can be set via the variable `ans_x_k3s_traefik_helm_values`
+Helm Values customization can be set via the variable `ans_e_k3s_traefik_helm_values`
 
 The possible values are defined [here](https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml)
 

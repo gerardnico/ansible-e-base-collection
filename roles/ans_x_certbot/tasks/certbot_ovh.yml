@@ -16,7 +16,7 @@
 # Create one certificate with the name of the first domain
 # that's why bytle.net is the first one
 - name: Get the Ovh certificate
-  with_items: "{{ans_x_certbot_ovh_domains}}"
+  with_items: "{{ans_e_certbot_ovh_domains}}"
   include_tasks: certbot_certonly_ovh.yml
   vars:
     letsencrypt_domain: '{{ item }}'

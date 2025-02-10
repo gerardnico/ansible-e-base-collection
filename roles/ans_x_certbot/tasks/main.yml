@@ -34,12 +34,12 @@
     path: "/root/.secrets/certbot"
 
 - name: Certbot - Cloudflare
-  when: ans_x_certbot_cloudflare_api_key is defined
+  when: ans_e_certbot_cloudflare_api_key is defined
   import_tasks: certbot_cloudflare.yml
   tags: certbot-cloudflare
 
 - name: Certbot - Ovh
-  when: ans_x_certbot_ovh_api_key is defined
+  when: ans_e_certbot_ovh_api_key is defined
   import_tasks: certbot_ovh.yml
   tags: certbot-ovh
 

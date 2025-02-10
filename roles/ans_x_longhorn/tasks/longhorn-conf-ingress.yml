@@ -1,5 +1,5 @@
 - name: Longhorn - Add Ingress to frontend
-  when: 'ans_x_longhorn_hostname is defined and ans_x_longhorn_hostname != ""'
+  when: 'ans_e_longhorn_hostname is defined and ans_e_longhorn_hostname != ""'
   run_once: true
   kubernetes.core.k8s:
     state: present

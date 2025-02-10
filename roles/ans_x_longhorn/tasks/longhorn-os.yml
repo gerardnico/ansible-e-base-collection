@@ -29,7 +29,7 @@
 
 # https://longhorn.io/docs/1.6.2/deploy/install/#using-the-environment-check-script
 - name: Longhorn - Run Environment check
-  shell: 'curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v{{ ans_x_longhorn_version }}/scripts/environment_check.sh | bash'
+  shell: 'curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v{{ ans_e_longhorn_version }}/scripts/environment_check.sh | bash'
   register: command_output
   failed_when: "'error' in command_output.stdout | lower"
   # Allow only 1 concurrent process to run (ie serial)

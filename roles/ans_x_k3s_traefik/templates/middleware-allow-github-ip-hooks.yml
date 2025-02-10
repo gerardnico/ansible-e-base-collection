@@ -3,7 +3,7 @@ kind: Middleware
 metadata:
   name: ip-allow-github-hooks-cidr
   # noinspection KubernetesUnknownValues
-  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+  namespace: '{{ ans_e_k3s_traefik_namespace }}'
   annotations:
     description: This middleware allows only the GitHub Hooks CIDR and our private network
 spec:

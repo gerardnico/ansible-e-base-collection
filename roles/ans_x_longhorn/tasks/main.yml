@@ -11,7 +11,7 @@
 
 # Run once (first server)
 - name: Longhorn - Install
-  when: 'ans_x_longhorn_version is defined and ans_x_longhorn_version != ""'
+  when: 'ans_e_longhorn_version is defined and ans_e_longhorn_version != ""'
   run_once: true
   ansible.builtin.include_tasks:
     file: 'longhorn-install.yml'
@@ -20,7 +20,7 @@
 
 # Run once (Conf)
 - name: Longhorn - Ingress Conf
-  when: 'ans_x_longhorn_version is defined and ans_x_longhorn_version != ""'
+  when: 'ans_e_longhorn_version is defined and ans_e_longhorn_version != ""'
   run_once: true
   ansible.builtin.include_tasks:
     file: 'longhorn-conf-ingress.yml'
@@ -29,7 +29,7 @@
 
 # Run once (Conf)
 - name: Longhorn - Backup Conf Conf
-  when: 'ans_x_recurring_job_cron is defined and ans_x_recurring_job_cron != ""'
+  when: 'ans_e_recurring_job_cron is defined and ans_e_recurring_job_cron != ""'
   run_once: true
   ansible.builtin.include_tasks:
     file: 'longhorn-conf-backup.yml'

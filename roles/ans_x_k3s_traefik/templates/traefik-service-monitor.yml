@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: traefik
-  namespace: '{{ ans_x_k3s_traefik_namespace }}'
+  namespace: '{{ ans_e_k3s_traefik_namespace }}'
   labels:
     app.kubernetes.io/name: traefik
 spec:

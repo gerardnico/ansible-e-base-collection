@@ -13,7 +13,7 @@ platforms:
   # https://github.com/ansible-community/molecule-plugins/tree/main/src/molecule_plugins/docker
   - name: '${DOCK_X_CONTAINER}'
     image: '${DOCK_X_REGISTRY}/${DOCK_X_NAMESPACE}/${DOCK_X_NAME}:${DOCK_X_TAG}'
-    hostname: '${ANS_X_OS_HOSTNAME}'
+    hostname: '${ANS_E_OS_HOSTNAME}'
     # or ${DOCK_X_CONTAINER}.docker.localhost
     pre_build_image: true
     override_command: false
@@ -24,7 +24,7 @@ platforms:
     network_mode: kube
     # https://docs.ansible.com/ansible/latest/collections/community/docker/docker_container_module.html#parameter-etc_hosts
 #    etc_hosts:
-#      ${ANS_X_OS_HOSTNAME}: 127.0.0.1
+#      ${ANS_E_OS_HOSTNAME}: 127.0.0.1
     published_ports:
       - "6443:6443"
       - "80:80"
@@ -35,8 +35,8 @@ platforms:
 #      - /tmp
     # Inventory group
     groups:
-      - '${ANS_X_INVENTORY_GROUP_SERVER}'
-      - '${ANS_X_INVENTORY_GROUP_ALL}'
+      - '${ANS_E_INVENTORY_GROUP_SERVER}'
+      - '${ANS_E_INVENTORY_GROUP_ALL}'
     volumes:
        # /var/lib/rancher has to be a local filesystem such as ext4 or XFS.
        # https://docs.k3s.io/cli/server#data
@@ -60,6 +60,6 @@ provisioner:
     host_vars:
       # setting for the docker/platform instance named 'molecule-debian'
       ${DOCK_X_CONTAINER}:
-        kubee_os_hostname: '${ANS_X_OS_HOSTNAME}'
+        kubee_os_hostname: '${ANS_E_OS_HOSTNAME}'
 #  playbooks:
 #    converge: ../playbooks/converge.yml

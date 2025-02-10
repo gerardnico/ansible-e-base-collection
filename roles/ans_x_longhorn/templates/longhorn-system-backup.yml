@@ -3,6 +3,6 @@ apiVersion: longhorn.io/v1beta2
 kind: SystemBackup
 metadata:
   name: longhorn-system-backup-2
-  namespace: '{{ ans_x_longhorn_namespace }}'
+  namespace: '{{ ans_e_longhorn_namespace }}'
 spec:
   volumeBackupPolicy: if-not-present

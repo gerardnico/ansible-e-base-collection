@@ -10,7 +10,7 @@
         state: restarted
     - name: Test that the service is up
       uri:
-        url: 'http://localhost:{{ ans_x_prometheus_node_exporter_port }}/metrics'
+        url: 'http://localhost:{{ ans_e_prometheus_node_exporter_port }}/metrics'
         method: GET
       register: httpcall
       until: httpcall.status == 200

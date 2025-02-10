@@ -5,28 +5,28 @@
 
 - name: Get helm installed version
   ansible.builtin.shell: helm version | grep -oP 'Version:"v\K[0-9.]+'
-  register: ans_x_helm_version_output
+  register: ans_e_helm_version_output
   changed_when: false
   ignore_errors: yes
 
 
 - name: Set helm installed version
-  when: ans_x_helm_version_output.rc == 0
+  when: ans_e_helm_version_output.rc == 0
   set_fact:
-    installed_ans_x_helm_version: '{{ ans_x_helm_version_output.stdout }}'
+    installed_ans_e_helm_version: '{{ ans_e_helm_version_output.stdout }}'
 
 - name: Set helm installed version
-  when: ans_x_helm_version_output.rc != 0
+  when: ans_e_helm_version_output.rc != 0
   set_fact:
-    installed_ans_x_helm_version: '0'
+    installed_ans_e_helm_version: '0'
 
-- name: helm version {{ installed_ans_x_helm_version }}
+- name: helm version {{ installed_ans_e_helm_version }}
   debug:
-    var: installed_ans_x_helm_version
+    var: installed_ans_e_helm_version
 
 - name: Update node only if needed
   # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/version_test.html
-  when: "installed_ans_x_helm_version is version(ans_x_helm_version, '<')"
+  when: "installed_ans_e_helm_version is version(ans_e_helm_version, '<')"
   block:
     # Ref: https://askubuntu.com/questions/1432705/permission-denied-when-executing-exec-on-tmp-ubuntu-22-04
     - name: Creates tmp directory to avoid sticky problem
@@ -53,4 +53,4 @@
     plugin_path: '{{ item.plugin_path }}'
     plugin_version: "{{ item.plugin_version | default() }}"
     state: "{{ item.state | default('present') }}"
-  with_items: '{{ ans_x_helm_plugins | default([]) }}'
+  with_items: '{{ ans_e_helm_plugins | default([]) }}'
