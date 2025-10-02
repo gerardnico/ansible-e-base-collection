@@ -11,6 +11,7 @@
         ans_e_os_packages: '{{ kubee_os_packages | default([]) }}'
         ans_e_os_admin_username: '{{ kubee_os_admin_username | default() }}'
         ans_e_os_admin_public_key: '{{ kubee_os_admin_public_key | default() }}'
+        ans_e_os_upgrade_cron: "{{ kubee_os_upgrade_cron | default('0 2 * * 0') }}"
 
     - name: Installing Helm
       ansible.builtin.include_role:
@@ -44,6 +45,21 @@
     # We could also --disable-helm-controller
     # https://docs.k3s.io/cli/server
     extra_server_args: "{{ ((k3s_extra_server_args | default([])) + ['--disable=traefik']) | join(' ') }}"
+
+# After operation
+- name: Kubee After
+  hosts: k3s_cluster
+  become: yes
+  tasks:
+    # Adding cronjob
+    # A restart is mandatory to start a vacuum process of the sqlite database if any
+    - name: K3s Cron Restart
+      ansible.builtin.copy:
+        dest: /etc/cron.d/k3s-restart
+        content: |
+          # Restart k3s
+          {{ kubee_k3s_restart_cron | default('0 11 * * *') }} root /usr/bin/systemctl restart k3s
+        mode: '0644'
 
 # Controle Node
 # https://github.com/k3s-io/k3s-ansible/blob/master/roles/k3s_server/tasks/main.yml#L145

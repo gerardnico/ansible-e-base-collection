@@ -9,9 +9,50 @@
     upgrade: dist
     update_cache: yes
 
-
 - name: "Apt - Install Utility Packages"
   ansible.builtin.apt:
     pkg: "{{ ans_e_os_packages }}"
     state: present
 
+- name: "Apt - System upgrade - Create apt upgrade script"
+  copy:
+    dest: /usr/local/bin/apt-upgrade.sh
+    mode: '0755'
+    content: |
+      #!/bin/bash
+      apt-get update -y
+      apt-get upgrade -y
+      
+      # Check if reboot is required
+      if [ -f /var/run/reboot-required ]; then
+        echo "Reboot required, restarting server..."
+        /sbin/reboot
+      fi
+
+- name: "Apt - Update Cron "
+  ansible.builtin.copy:
+    dest: /etc/cron.d/apt-upgrade
+    mode: '0644'
+    content: |
+      # Ansible managed - apt update and upgrade
+      {{ ans_e_os_upgrade_cron | default('0 2 * * 0') }} root /usr/local/bin/apt-upgrade.sh >> /var/log/apt-upgrade-cron.log 2>&1
+
+#    Rotate weekly - Creates a new log file each week
+#    Keep 4 rotations - Retains 4 weeks of logs (adjust with rotate value)
+#    Compress old logs - Saves disk space with gzip
+#    Delay compression - Waits one cycle before compressing (in case you need to check recent logs)
+#    Missing OK - Doesn't error if log file is missing
+#    Not if empty - Doesn't rotate if the log is empty
+- name: "Apt - Setup logrotate for apt upgrade log"
+  ansible.builtin.copy:
+    dest: /etc/logrotate.d/apt-upgrade
+    mode: '0644'
+    content: |
+      /var/log/apt-upgrade-cron.log {
+          weekly
+          rotate 4
+          compress
+          delaycompress
+          missingok
+          notifempty
+      }
