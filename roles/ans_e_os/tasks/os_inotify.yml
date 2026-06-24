@@ -1,0 +1,19 @@
+# When using kubernetes (k3s), they watch a lot of directory
+# and this limit may need to change
+- name: Set fs.inotify.max_user_instances
+  when: 'ans_e_os_inotify_max_user_instances is defined and ans_e_os_inotify_max_user_instances != ""'
+  ansible.posix.sysctl:
+    name: fs.inotify.max_user_instances
+    value: '{{ ans_e_os_inotify_max_user_instances }}'
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: Set fs.inotify.max_user_watches
+  when: 'ans_e_os_inotify_max_user_watches is defined and ans_e_os_inotify_max_user_watches != ""'
+  ansible.posix.sysctl:
+    name: fs.inotify.max_user_watches
+    value: '{{ ans_e_os_inotify_max_user_watches }}'
+    sysctl_set: true
+    state: present
+    reload: true

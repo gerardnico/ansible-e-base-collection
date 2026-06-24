@@ -36,6 +36,9 @@
   import_tasks: 'os_hostname.yml'
   tags: network
 
+- name: Configure the inotify limits
+  become: true
+  import_tasks: 'os_inotify.yml'
 
 #- name: Cgroups # Resource consumption
 #  become: true

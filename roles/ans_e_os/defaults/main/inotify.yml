@@ -1,0 +1,5 @@
+
+# the value of fs.inotify.max_user_instances
+ans_e_os_inotify_max_user_instances:
+# the value of fs.inotify.max_user_watches
+ans_e_os_inotify_max_user_watches:

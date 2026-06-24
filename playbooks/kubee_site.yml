@@ -12,6 +12,8 @@
         ans_e_os_admin_username: '{{ kubee_os_admin_username | default() }}'
         ans_e_os_admin_public_key: '{{ kubee_os_admin_public_key | default() }}'
         ans_e_os_upgrade_cron: "{{ kubee_os_upgrade_cron | default('0 2 * * 0') }}"
+        ans_e_os_inotify_max_user_instances: '{{ kubee_inotify_max_user_instances | default() }}'
+        ans_e_os_inotify_max_user_watches: '{{ kubee_inotify_max_user_watches | default() }}'
 
     - name: Installing Helm
       ansible.builtin.include_role:

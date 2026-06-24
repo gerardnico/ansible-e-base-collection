@@ -7,6 +7,7 @@ This role execute common init/bootstrap tasks:
 * add an optional admin user (in the wheel group)
 * add optional packages
 * disable selinux by default
+* update [inotify limits if set](defaults/main/inotify.yml)
 
 ## Vars
 
@@ -16,6 +17,7 @@ This role execute common init/bootstrap tasks:
 * `ans_e_os_packages`: `Optional` a list of packages to install
 * `ans_e_os_packages_epel_repo_enabled`: `Optional` a boolean to add or no [Extra Packages for Enterprise Linux (epel)](https://docs.fedoraproject.org/en-US/epel/) (yum base only)
 * `ans_e_selinux_disabled`: `Optional` default to true
+* `ans_e_os_inotify_max_user_instances` and `ans_e_os_inotify_max_user_watches`:  `Optional` default to none
 
 ## Example / Usage
 
