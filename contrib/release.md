@@ -10,7 +10,7 @@ git push origin main
 ```
 * create the tag
 ```bash
-# no v
+# no v required by ansible to work with >=
 git tag -a 1.0.1 -m "Release 1.0.1"
 git push origin 1.0.1
 ```
