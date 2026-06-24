@@ -4,7 +4,7 @@
 
 ```bash
 CLONE_DIR=~/code/gerardnico/ansible-e-base-collection
-git clone https://github.com/gerardnico/ansible-e-base-collection $CLONE_DIR
+git clone git@github.com:gerardnico/ansible-e-base-collection.git $CLONE_DIR
 # install
 COLLECTION_DIR=~/.kubee/collections/ansible_collections
 rm -rf "$COLLECTION_DIR/ans_e"
